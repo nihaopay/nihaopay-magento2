@@ -5,7 +5,7 @@ namespace Nihaopay\Payments\Model\Source;
 use Magento\Framework\Option\ArrayInterface;
 
 
-class WorldpayMode implements ArrayInterface {
+class NihaopayMode implements ArrayInterface {
 
 	public function toOptionArray() {
 		return [
