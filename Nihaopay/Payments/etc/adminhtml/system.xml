@@ -3,72 +3,33 @@
 <system>
     <section id="payment" translate="label" sortOrder="345" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
 
-        <group id="worldpay_payments" translate="label" sortOrder="100" type="text" showInDefault="1" showInWebsite="1">
-            <label>Worldpay Online Payments</label>
+        <group id="nihaopay_payments" translate="label" sortOrder="100" type="text" showInDefault="1" showInWebsite="1">
+            <label>Nihaopay Online Payments</label>
             <field id="mode" translate="label" sortOrder="6" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Environment Mode</label>
-                <source_model>Nihaopay\Payments\Model\Source\WorldpayMode</source_model>
-                <config_path>payment/worldpay_payments_card/mode</config_path>
+                <source_model>Nihaopay\Payments\Model\Source\NihaopayMode</source_model>
+                <config_path>payment/nihaopay_payments_card/mode</config_path>
             </field>
             <field id="test_service_key" translate="label" sortOrder="7" type="text" showInDefault="1" showInStore="1">
                 <label>Test Service Key</label>
-                <config_path>payment/worldpay_payments_card/test_service_key</config_path>
+                <config_path>payment/nihaopay_payments_card/test_service_key</config_path>
             </field>
-            <field id="test_client_key" translate="label" sortOrder="8" type="text" showInDefault="1" showInStore="1">
-                <label>Test Client Key</label>
-                <config_path>payment/worldpay_payments_card/test_client_key</config_path>
-            </field>
+          
             <field id="live_service_key" translate="label" sortOrder="9" type="text" showInDefault="1" showInStore="1">
                 <label>Live Service Key</label>
-                <config_path>payment/worldpay_payments_card/live_service_key</config_path>
+                <config_path>payment/nihaopay_payments_card/live_service_key</config_path>
             </field>
-            <field id="live_client_key" translate="label" sortOrder="10" type="text" showInDefault="1" showInStore="1">
-                <label>Live Client Key</label>
-                <config_path>payment/worldpay_payments_card/live_client_key</config_path>
-            </field>         
-            <field id="settlement_currency" translate="label" sortOrder="12" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Default Settlement Currency</label>
-                <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
-                <config_path>payment/worldpay_payments_card/settlement_currency</config_path>
-            </field>
-            <field id="order_status" translate="label" sortOrder="13" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>New order status</label>
-                <source_model>Magento\Sales\Model\Config\Source\Order\Status\Processing</source_model>
-                <config_path>payment/worldpay_payments_card/order_status</config_path>
-            </field>
-            <field id="description" translate="label" sortOrder="14" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Payment Description</label>
-                <config_path>payment/worldpay_payments_card/payment_description</config_path>
-            </field>
-
-            <field id="mapping" translate="label comment tooltip" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Sitecodes</label>
-                <frontend_model>Nihaopay\Payments\Block\Adminhtml\Sitecode</frontend_model>
-                <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
-                <config_path>payment/worldpay_payments_card/sitecodes</config_path>
-                <tooltip>Maps currency to sitecode, if you do not use site codes, you can leave it blank</tooltip>
-            </field>
-
-            <field id="shop_country_code" translate="label" sortOrder="12" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Shop Country Code</label>
-                <source_model>Magento\Config\Model\Config\Source\Locale\Country</source_model>
-                <config_path>payment/worldpay_payments_card/shop_country_code</config_path>
-            </field>
-            <field id="language_code" translate="label" sortOrder="14" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Language Code</label>
-                <config_path>payment/worldpay_payments_card/language_code</config_path>
-            </field>
-
+           
         </group>
 
         
 
-        <group id="worldpay_payments_alipay" translate="label" sortOrder="400" type="text" showInDefault="1" showInWebsite="1">
-            <label>Worldpay Alipay</label>
+        <group id="nihaopay_payments_alipay" translate="label" sortOrder="400" type="text" showInDefault="1" showInWebsite="1">
+            <label>Nihaopay Alipay</label>
             <field id="alipay_active" translate="label" sortOrder="1" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Alipay Enabled</label>
                 <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                <config_path>payment/worldpay_payments_alipay/active</config_path>
+                <config_path>payment/nihaopay_payments_alipay/active</config_path>
             </field>
             <field id="title" translate="label" sortOrder="2" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Title</label>
@@ -76,7 +37,7 @@
             <field id="giropay_logging" translate="label" sortOrder="3" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Enable Debug</label>
                 <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                <config_path>payment/worldpay_payments_alipay/debug</config_path>
+                <config_path>payment/nihaopay_payments_alipay/debug</config_path>
             </field>
         </group>
 
