@@ -1,5 +1,5 @@
 <?php
-namespace Worldpay\Payments\Block\Form;
+namespace Nihaopay\Payments\Block\Form;
 
 class Card extends \Magento\Payment\Block\Form
 {
@@ -13,7 +13,7 @@ class Card extends \Magento\Payment\Block\Form
     
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Worldpay\Payments\Model\Config $config,
+        \Nihaopay\Payments\Model\Config $config,
         \Magento\Payment\Helper\Data $paymentHelper,
         array $data = []
     ) {

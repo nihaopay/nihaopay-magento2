@@ -1,6 +1,6 @@
 <?php
 
-namespace Worldpay\Payments\Controller\Apm;
+namespace Nihaopay\Payments\Controller\Apm;
 use Magento\Payment\Helper\Data as PaymentHelper;
 
 abstract class Apm extends \Magento\Framework\App\Action\Action
@@ -38,7 +38,7 @@ abstract class Apm extends \Magento\Framework\App\Action\Action
 
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
-        \Worldpay\Payments\Model\Methods\WorldpayPayments $Worldpay,
+        \Nihaopay\Payments\Model\Methods\WorldpayPayments $Worldpay,
         PaymentHelper $paymentHelper,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Checkout\Model\Session $checkoutSession,

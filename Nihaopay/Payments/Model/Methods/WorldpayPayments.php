@@ -1,6 +1,6 @@
 <?php
 
-namespace Worldpay\Payments\Model\Methods;
+namespace Nihaopay\Payments\Model\Methods;
 
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
@@ -45,21 +45,21 @@ class WorldpayPayments extends AbstractMethod
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Payment\Model\Method\Logger $logger,
         \Magento\Backend\Model\Auth\Session $backendAuthSession,
-        \Worldpay\Payments\Model\Config $config,
+        \Nihaopay\Payments\Model\Config $config,
         \Magento\Checkout\Model\Cart $cart,
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Sales\Model\Order\Email\Sender\InvoiceSender $invoiceSender,
         \Magento\Framework\DB\TransactionFactory $transactionFactory,
         \Magento\Customer\Model\Session $customerSession,
-        \Worldpay\Payments\Model\Resource\SavedCard\CollectionFactory $savedCardFactory,
+        \Nihaopay\Payments\Model\Resource\SavedCard\CollectionFactory $savedCardFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Checkout\Helper\Data $checkoutData,
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Quote\Api\CartManagementInterface $quoteManagement,
         \Magento\Sales\Model\Order\Email\Sender\OrderSender $orderSender,
         \Magento\Backend\Model\Session\Quote $sessionQuote,
-        \Worldpay\Payments\Logger\Logger $wpLogger,
+        \Nihaopay\Payments\Logger\Logger $wpLogger,
         \Magento\Sales\Model\Order $order,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,

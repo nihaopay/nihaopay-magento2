@@ -7,7 +7,7 @@
             <label>Worldpay Online Payments</label>
             <field id="mode" translate="label" sortOrder="6" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Environment Mode</label>
-                <source_model>Worldpay\Payments\Model\Source\WorldpayMode</source_model>
+                <source_model>Nihaopay\Payments\Model\Source\WorldpayMode</source_model>
                 <config_path>payment/worldpay_payments_card/mode</config_path>
             </field>
             <field id="test_service_key" translate="label" sortOrder="7" type="text" showInDefault="1" showInStore="1">
@@ -43,7 +43,7 @@
 
             <field id="mapping" translate="label comment tooltip" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Sitecodes</label>
-                <frontend_model>Worldpay\Payments\Block\Adminhtml\Sitecode</frontend_model>
+                <frontend_model>Nihaopay\Payments\Block\Adminhtml\Sitecode</frontend_model>
                 <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
                 <config_path>payment/worldpay_payments_card/sitecodes</config_path>
                 <tooltip>Maps currency to sitecode, if you do not use site codes, you can leave it blank</tooltip>
@@ -74,7 +74,7 @@
             <field id="payment_action" translate="label" sortOrder="3" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Payment Action</label>
                 <config_path>payment/worldpay_payments_card/payment_action</config_path>
-                <source_model>Worldpay\Payments\Model\Source\PaymentAction</source_model>
+                <source_model>Nihaopay\Payments\Model\Source\PaymentAction</source_model>
             </field>
             <field id="storeonfile" translate="label" sortOrder="4" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Store customers card on file</label>

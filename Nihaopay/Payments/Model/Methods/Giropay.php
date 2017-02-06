@@ -1,6 +1,6 @@
 <?php
 
-namespace Worldpay\Payments\Model\Methods;
+namespace Nihaopay\Payments\Model\Methods;
 
 
 

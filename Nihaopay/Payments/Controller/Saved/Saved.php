@@ -1,5 +1,5 @@
 <?php
-namespace Worldpay\Payments\Controller\Saved;
+namespace Nihaopay\Payments\Controller\Saved;
 
 abstract class Saved extends \Magento\Framework\App\Action\Action
 {
@@ -14,7 +14,7 @@ abstract class Saved extends \Magento\Framework\App\Action\Action
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Customer\Model\Url $customerUrl,
-        \Worldpay\Payments\Model\Resource\SavedCard\CollectionFactory $savedCardFactory
+        \Nihaopay\Payments\Model\Resource\SavedCard\CollectionFactory $savedCardFactory
     ) {
         $this->customerSession = $customerSession;
         $this->resultPageFactory = $resultPageFactory;

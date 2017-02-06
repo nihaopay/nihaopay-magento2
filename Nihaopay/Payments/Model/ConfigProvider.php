@@ -1,5 +1,5 @@
 <?php
-namespace Worldpay\Payments\Model;
+namespace Nihaopay\Payments\Model;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\Escaper;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Worldpay\Payments\Controller\Saved;
+namespace Nihaopay\Payments\Controller\Saved;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Model\Session;

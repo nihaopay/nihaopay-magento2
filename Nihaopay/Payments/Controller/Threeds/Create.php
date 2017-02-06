@@ -1,6 +1,6 @@
 <?php
 
-namespace Worldpay\Payments\Controller\Threeds;
+namespace Nihaopay\Payments\Controller\Threeds;
 
 class Create extends Threeds
 {

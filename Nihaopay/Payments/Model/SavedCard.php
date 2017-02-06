@@ -1,5 +1,5 @@
 <?php
-namespace Worldpay\Payments\Model;
+namespace Nihaopay\Payments\Model;
 
 class SavedCard extends \Magento\Framework\Model\AbstractModel
 {
@@ -10,7 +10,7 @@ class SavedCard extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Worldpay\Payments\Model\Resource\SavedCard');
+        $this->_init('Nihaopay\Payments\Model\Resource\SavedCard');
     }
 
     public function getAvailableCustomerBillingAgreements($customerId)

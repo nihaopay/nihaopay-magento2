@@ -1,6 +1,6 @@
 <?php
 
-namespace Worldpay\Payments\Logger;
+namespace Nihaopay\Payments\Logger;
  
 use Monolog\Logger as MonoLogger;
  

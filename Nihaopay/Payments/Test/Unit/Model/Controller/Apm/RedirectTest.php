@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Worldpay\Payments\Test\Unit\Controller\Apm;
+namespace Nihaopay\Payments\Test\Unit\Controller\Apm;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 

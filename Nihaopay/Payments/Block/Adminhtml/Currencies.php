@@ -1,5 +1,5 @@
 <?php
-namespace Worldpay\Payments\Block\Adminhtml;
+namespace Nihaopay\Payments\Block\Adminhtml;
 
 class Currencies extends \Magento\Framework\View\Element\Html\Select
 {

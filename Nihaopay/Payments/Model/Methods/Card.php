@@ -1,13 +1,13 @@
 <?php
 
-namespace Worldpay\Payments\Model\Methods;
+namespace Nihaopay\Payments\Model\Methods;
 
 use Magento\Payment\Model\InfoInterface;
 use Magento\Framework\Exception\LocalizedException;
 
 class Card extends WorldpayPayments {
 
-    protected $_formBlockType = 'Worldpay\Payments\Block\Form\Card';
+    protected $_formBlockType = 'Nihaopay\Payments\Block\Form\Card';
     protected $_code = 'worldpay_payments_card';
     protected $_isGateway               = false;
     protected $_canAuthorize            = true;
@@ -51,7 +51,7 @@ class Card extends WorldpayPayments {
                 ->getFirstItem();
 
             if (empty($token_exists['token'])) {
-                $model = $this->_objectManager->create('Worldpay\Payments\Model\SavedCard');
+                $model = $this->_objectManager->create('Nihaopay\Payments\Model\SavedCard');
                 $model->setData('customer_id', $customerId);
                 $model->setData('token', $_paymentToken);
                 $model->save();

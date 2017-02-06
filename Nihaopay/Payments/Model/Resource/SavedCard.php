@@ -1,6 +1,6 @@
 <?php
 
-namespace Worldpay\Payments\Model\Resource;
+namespace Nihaopay\Payments\Model\Resource;
  
 class SavedCard extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

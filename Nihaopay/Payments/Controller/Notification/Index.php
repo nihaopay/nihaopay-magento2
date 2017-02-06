@@ -1,6 +1,6 @@
 <?php
 
-namespace Worldpay\Payments\Controller\Notification;
+namespace Nihaopay\Payments\Controller\Notification;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Model\OrderFactory;
@@ -27,7 +27,7 @@ class Index extends \Magento\Framework\App\Action\Action
         \Magento\Framework\App\Action\Context $context,
         OrderFactory $modelOrderFactory, 
         PaymentFactory $orderPaymentFactory,
-        \Worldpay\Payments\Model\Methods\WorldpayPayments $Worldpay)
+        \Nihaopay\Payments\Model\Methods\WorldpayPayments $Worldpay)
     {
         $this->_modelOrderFactory = $modelOrderFactory;
         $this->_orderPaymentFactory = $orderPaymentFactory;

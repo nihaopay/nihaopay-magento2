@@ -1,5 +1,5 @@
 <?php
-namespace Worldpay\Payments\Model;
+namespace Nihaopay\Payments\Model;
 
 class Config
 {

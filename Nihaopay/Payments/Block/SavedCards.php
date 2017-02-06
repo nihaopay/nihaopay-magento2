@@ -1,5 +1,5 @@
 <?php
-namespace Worldpay\Payments\Block;
+namespace Nihaopay\Payments\Block;
 
 class SavedCards extends \Magento\Framework\View\Element\Template
 {
@@ -12,7 +12,7 @@ class SavedCards extends \Magento\Framework\View\Element\Template
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Payment\Model\Config $paymentConfig,
-        \Worldpay\Payments\Model\Config $config,
+        \Nihaopay\Payments\Model\Config $config,
         \Magento\Backend\Model\Session\Quote $sessionQuote,
         \Magento\Payment\Helper\Data $paymentHelper,
         array $data = []

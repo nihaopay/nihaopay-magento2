@@ -3,14 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Worldpay\Payments\Model\Config;
+namespace Nihaopay\Payments\Model\Config;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory as TransactionCollectionFactory;
 use Magento\Sales\Model\Order\Payment\Transaction as PaymentTransaction;
 use Magento\Payment\Model\InfoInterface;
 
-class Card extends \Worldpay\Payments\Model\Config
+class Card extends \Nihaopay\Payments\Model\Config
 {
     const KEY_USE_VAULT = 'use_vault';
     const KEY_ALLOW_DUPLICATE_CARD = 'duplicate_card';

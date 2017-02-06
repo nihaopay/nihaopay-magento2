@@ -1,5 +1,5 @@
 <?php
-namespace Worldpay\Payments\Model\Methods;
+namespace Nihaopay\Payments\Model\Methods;
 
 class Postepay extends WorldpayPayments {
 

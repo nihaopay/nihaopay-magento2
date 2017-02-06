@@ -1,6 +1,6 @@
 <?php 
 
-namespace Worldpay\Payments\Setup;
+namespace Nihaopay\Payments\Setup;
 
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Worldpay\Payments\Controller\Apm;
+namespace Nihaopay\Payments\Controller\Apm;
 
 use Magento\Checkout\Model\Session;
 use Magento\Sales\Model\OrderFactory;

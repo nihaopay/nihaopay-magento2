@@ -1,5 +1,5 @@
 <?php
-namespace Worldpay\Payments\Block\Adminhtml;
+namespace Nihaopay\Payments\Block\Adminhtml;
 
 class Sitecode extends \Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray
 {
@@ -31,7 +31,7 @@ class Sitecode extends \Magento\Config\Block\System\Config\Form\Field\FieldArray
     {
         if (!$this->currencyRenderer) {
             $this->currencyRenderer = $this->getLayout()->createBlock(
-                'Worldpay\Payments\Block\Adminhtml\Currencies',
+                'Nihaopay\Payments\Block\Adminhtml\Currencies',
                 '',
                 ['data' => ['is_render_to_js_template' => true]]
             );
@@ -43,7 +43,7 @@ class Sitecode extends \Magento\Config\Block\System\Config\Form\Field\FieldArray
     {
         if (!$this->settlementCurrencyRenderer) {
             $this->settlementCurrencyRenderer = $this->getLayout()->createBlock(
-                'Worldpay\Payments\Block\Adminhtml\SettlementCurrencies',
+                'Nihaopay\Payments\Block\Adminhtml\SettlementCurrencies',
                 '',
                 ['data' => ['is_render_to_js_template' => true]]
             );

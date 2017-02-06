@@ -1,6 +1,6 @@
 <?php
 
-namespace Worldpay\Payments\Model\Source;
+namespace Nihaopay\Payments\Model\Source;
 
 use Magento\Framework\Option\ArrayInterface;
 

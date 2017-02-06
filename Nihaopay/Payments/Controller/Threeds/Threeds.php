@@ -1,6 +1,6 @@
 <?php
 
-namespace Worldpay\Payments\Controller\Threeds;
+namespace Nihaopay\Payments\Controller\Threeds;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Payment\Helper\Data as PaymentHelper;
 
