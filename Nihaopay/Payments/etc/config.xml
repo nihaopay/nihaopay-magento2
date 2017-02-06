@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+  <default>
+    <payment>
+      <nihaopay_payments_alipay>
+          <active>0</active>
+          <title>Nihaopay Alipay</title>
+          <enable_logging>0</enable_logging>
+          <model>Nihaopay\Payments\Model\Methods\Alipay</model>
+        </nihaopay_payments_alipay>
+    </payment>
+  </default>
+</config>
