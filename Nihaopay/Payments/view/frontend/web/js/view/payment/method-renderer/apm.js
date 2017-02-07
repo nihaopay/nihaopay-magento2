@@ -25,7 +25,21 @@ define(
                 return this;
             },
             createToken: function(element, event, extraInput) {
-                 $.mage.redirect(wpConfig.redirect_url);
+                 
+
+
+                 $.when(setPaymentInformationAction(this.messageContainer, {
+                    'method': this.getCode(),
+                    'additional_data': {
+                        "paymentToken": this.paymentToken()
+                    }
+                    })).done(function () {
+                        fullScreenLoader.startLoader();
+                        $.mage.redirect(wpConfig.redirect_url);
+                    }).fail(function () {
+                        this.isPlaceOrderActionAllowed(true);
+                    });
+
             },
             getData: function () {
                 return {
