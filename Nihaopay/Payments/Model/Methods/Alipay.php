@@ -11,7 +11,7 @@ class Alipay extends WorldpayPayments {
 	protected $_formBlockType = 'nihaopay/payment_alipayForm';
     protected $_isGateway = true;
 
-    function myvendor(){
-    	return "alipay"
+    protected function myvendor(){
+    	return "alipay";
     }
 }

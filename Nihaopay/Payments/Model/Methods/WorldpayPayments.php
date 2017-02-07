@@ -170,7 +170,7 @@ class WorldpayPayments extends AbstractMethod
         $callback = Mage::getUrl('nihaopay/securepay/callback');
         $methodCode = $oOrder->getPayment()->getMethod();
         $this->log('current method=' . $methodCode);
-        $vendor = this->myvendor();
+        $vendor = $this->myvendor();
         
         $requestor = new Requestor();
         $requestor->setDebug($debug);
@@ -187,6 +187,10 @@ class WorldpayPayments extends AbstractMethod
             throw new \Exception('Payment failed, please try again later ' . $e->getMessage());
         }
         
+    }
+
+    protected function myvendor(){
+        return "";
     }
 
     public function isTokenAllowed()
