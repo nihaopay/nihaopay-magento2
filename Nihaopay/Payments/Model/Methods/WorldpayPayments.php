@@ -104,7 +104,7 @@ class WorldpayPayments extends AbstractMethod
     }
 
     public function getOrderPlaceRedirectUrl() {
-        return $this->urlBuilder->getUrl('worldpay/apm/redirect', ['_secure' => true]);
+        return $this->urlBuilder->getUrl('nihaopay/apm/redirect', ['_secure' => true]);
     }
 
     public function assignData(\Magento\Framework\DataObject $data)

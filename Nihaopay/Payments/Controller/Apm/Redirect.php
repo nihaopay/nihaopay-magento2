@@ -15,44 +15,17 @@ class Redirect extends Apm
         $quote = $this->checkoutSession->getQuote();
         $code = $quote->getPayment()->getMethod();
         $quote = $this->methods[$code]->readyMagentoQuote();
+        
 
-        try {
-            $redirectUrl = $this->methods[$code]->createApmOrder($quote);
-        }
-        catch(\Exception $e) {
-            return $result->setData([
-                'success' => false,
-                'error' => $e->getMessage()
-            ]);
-        }
-        try {
-            $order = $this->methods[$code]->createMagentoOrder($quote);
-        }
-        catch(\Exception $e) {
-            return $result->setData([
-                'success' => false,
-                'error' => $e->getMessage()
-            ]);
-        }
+        /** @var \Magento\Framework\Controller\Result\Raw $response */
+        $response = $this->resultFactory->create(ResultFactory::TYPE_RAW);
+        $response->setHeader('Content-type', 'text/plain');
+        $data1 = 'This is test';
+        $data2 = 20;
+        $response->setContents(
+             $data1
+        );
+        return $response;
 
-        if (!$order) {
-            return $result->setData([
-                'success' => false,
-                'error' => 'Error, please try again'
-            ]);
-        }
-
-        $orderCode = $quote->getPayment()->getAdditionalInformation("worldpayOrderCode");
-
-        $order->addStatusHistoryComment(
-            __('Redirecting user with Worldpay Order Code  #%1.', $orderCode)
-        )->setIsCustomerNotified(false)->save();
-
-        $this->methods[$code]->sendMagentoOrder($order);
-
-        return $result->setData([
-            'success' => true,
-            'redirectURL' => $redirectUrl
-        ]);
     }
 }
