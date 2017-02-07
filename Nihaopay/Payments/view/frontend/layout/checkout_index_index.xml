@@ -18,43 +18,43 @@
                                                         <item name="renders" xsi:type="array">
                                                             <!-- merge payment method renders here -->
                                                             <item name="children" xsi:type="array">
-                                                                <item name="worldpay_payments_methods" xsi:type="array">
+                                                                <item name="nihaopay_payments_methods" xsi:type="array">
                                                                     <item name="component" xsi:type="string">Nihaopay_Payments/js/view/payment/method-renderer</item>
                                                                     <item name="methods" xsi:type="array">
-                                                                        <item name="worldpay_payments_card" xsi:type="array">
+                                                                        <item name="nihaopay_payments_card" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
-                                                                        <item name="worldpay_payments_paypal" xsi:type="array">
+                                                                        <item name="nihaopay_payments_paypal" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
-                                                                        <item name="worldpay_payments_alipay" xsi:type="array">
+                                                                        <item name="nihaopay_payments_alipay" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
-                                                                        <item name="worldpay_payments_giropay" xsi:type="array">
+                                                                        <item name="nihaopay_payments_giropay" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
-                                                                        <item name="worldpay_payments_ideal" xsi:type="array">
+                                                                        <item name="nihaopay_payments_ideal" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
-                                                                        <item name="worldpay_payments_mistercash" xsi:type="array">
+                                                                        <item name="nihaopay_payments_mistercash" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
-                                                                        <item name="worldpay_payments_przelewy24" xsi:type="array">
+                                                                        <item name="nihaopay_payments_przelewy24" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
-                                                                        <item name="worldpay_payments_paysafecard" xsi:type="array">
+                                                                        <item name="nihaopay_payments_paysafecard" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
-                                                                        <item name="worldpay_payments_postepay" xsi:type="array">
+                                                                        <item name="nihaopay_payments_postepay" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
-                                                                        <item name="worldpay_payments_qiwi" xsi:type="array">
+                                                                        <item name="nihaopay_payments_qiwi" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
-                                                                        <item name="worldpay_payments_sofort" xsi:type="array">
+                                                                        <item name="nihaopay_payments_sofort" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
-                                                                        <item name="worldpay_payments_yandex" xsi:type="array">
+                                                                        <item name="nihaopay_payments_yandex" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
                                                                     </item>
