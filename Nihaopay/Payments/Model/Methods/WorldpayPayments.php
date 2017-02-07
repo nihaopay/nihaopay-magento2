@@ -130,8 +130,6 @@ class WorldpayPayments extends AbstractMethod
         $token = $payment->getAdditionalInformation('payment_token');
         $amount = $quote->getGrandTotal();
 
-        $worldpay = $this->setupWorldpay();
-
         $currency_code = $quote->getQuoteCurrencyCode();
 
         $orderDetails = $this->getSharedOrderDetails($quote, $currency_code);

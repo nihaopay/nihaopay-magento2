@@ -2,8 +2,6 @@
 
 namespace Nihaopay\Payments\Model;
 
-require_once 'NihaoPay/Payments/Model/Error/Api.php';
-
 class CurlClient 
 {
     private static $instance;
