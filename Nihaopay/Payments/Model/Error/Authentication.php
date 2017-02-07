@@ -1,6 +1,6 @@
 <?php
 
-namespace NihaoPay\Model\Error;
+namespace Nihaopay\Payments\Model\Error;
 
 class Authentication extends Base
 {
