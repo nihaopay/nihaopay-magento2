@@ -41,7 +41,7 @@ abstract class Apm extends \Magento\Framework\App\Action\Action
         $this->checkoutSession = $checkoutSession;
         $this->orderFactory = $orderFactory;
         $this->orderSender = $orderSender;
-        $this->wordpayPaymentsCard = $paymentHelper->getMethodInstance('worldpay_payments_card');
+        
         foreach ($this->methodCodes as $code) {
             $this->methods[$code] = $paymentHelper->getMethodInstance($code);
         }
