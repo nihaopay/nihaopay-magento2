@@ -23,7 +23,7 @@ abstract class Apm extends \Magento\Framework\App\Action\Action
     protected $wordpayPaymentsCard;
 
     protected $methodCodes = [
-        'worldpay_payments_alipay'
+        'nihaopay_payments_alipay'
     ];
 
     public function __construct(
