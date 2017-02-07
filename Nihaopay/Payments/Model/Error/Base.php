@@ -5,7 +5,7 @@
 //use Exception;
 
 
-abstract class Error_Base extends Exception
+abstract class MyError_Base extends Exception
 {
 
 	protected $params = null;
