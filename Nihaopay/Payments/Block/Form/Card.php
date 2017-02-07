@@ -8,7 +8,7 @@ class Card extends \Magento\Payment\Block\Form
      *
      * @var string
      */
-    protected $_template = 'Worldpay_Payments::form/card.phtml';
+    protected $_template = 'Nihaopay_Payments::form/card.phtml';
     private $worldpayPaymentsCard;
     
     public function __construct(

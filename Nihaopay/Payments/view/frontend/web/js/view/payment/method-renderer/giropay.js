@@ -2,13 +2,13 @@
 /*global define*/
 define(
      [
-        'Worldpay_Payments/js/view/payment/method-renderer/apm'
+        'Nihaopay_Payments/js/view/payment/method-renderer/apm'
     ],
     function (Apm) {
         'use strict';
         return Apm.extend({
             defaults: {
-                template: 'Worldpay_Payments/form/giropay',
+                template: 'Nihaopay_Payments/form/giropay',
                 paymentToken: false,
                 swiftCode: ''
             },

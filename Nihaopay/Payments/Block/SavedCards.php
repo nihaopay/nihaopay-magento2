@@ -3,7 +3,7 @@ namespace Nihaopay\Payments\Block;
 
 class SavedCards extends \Magento\Framework\View\Element\Template
 {
-    protected $_template = 'Worldpay_Payments::saved_cards.phtml';
+    protected $_template = 'Nihaopay_Payments::saved_cards.phtml';
     protected $worldpayPaymentsCard;
     protected $config;
     protected $urlBuilder;

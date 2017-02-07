@@ -10,10 +10,10 @@ define(
         'use strict';
 
         window.WorldpayMagentoVersion = '2.0.25';
-        var defaultComponent = 'Worldpay_Payments/js/view/payment/method-renderer/card';
-        var apmComponent = 'Worldpay_Payments/js/view/payment/method-renderer/apm';
-        var giropayComponent = 'Worldpay_Payments/js/view/payment/method-renderer/giropay';
-        var idealComponent = 'Worldpay_Payments/js/view/payment/method-renderer/ideal';
+        var defaultComponent = 'Nihaopay_Payments/js/view/payment/method-renderer/card';
+        var apmComponent = 'Nihaopay_Payments/js/view/payment/method-renderer/apm';
+        var giropayComponent = 'Nihaopay_Payments/js/view/payment/method-renderer/giropay';
+        var idealComponent = 'Nihaopay_Payments/js/view/payment/method-renderer/ideal';
 
         var methods = [
             {type: 'worldpay_payments_card', component: defaultComponent},

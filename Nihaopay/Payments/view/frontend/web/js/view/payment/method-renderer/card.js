@@ -16,7 +16,7 @@ define(
         var currentCallback = false;
         return Component.extend({
             defaults: {
-                template: 'Worldpay_Payments/form/card',
+                template: 'Nihaopay_Payments/form/card',
                 cvc: '',
                 iframeElement: false,
                 paymentToken: false,

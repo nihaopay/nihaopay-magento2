@@ -16,7 +16,7 @@ define(
         var wpConfig = window.checkoutConfig.payment.worldpay_payments;
         return Component.extend({
             defaults: {
-                template: 'Worldpay_Payments/form/apm',
+                template: 'Nihaopay_Payments/form/apm',
                 paymentToken: false           
             },
             initObservable: function () {
