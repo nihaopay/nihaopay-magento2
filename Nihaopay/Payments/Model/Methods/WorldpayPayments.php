@@ -158,37 +158,25 @@ class WorldpayPayments extends AbstractMethod
                 'shopperAcceptHeader' => $orderDetails['shopperAcceptHeader'],
                 'shopperEmailAddress' => $orderDetails['shopperEmailAddress']
             ];
-            $this->_debug('Order Request: ' .  print_r($createOrderRequest, true));
-            $response = $worldpay->createApmOrder($createOrderRequest);
-            $this->_debug('Order Response: ' .  print_r($response, true));
-            
-            if ($response['paymentStatus'] === 'SUCCESS') {
-                $this->_debug('Order Request: ' . $response['orderCode']  . ' SUCCESS');
-                $payment->setIsTransactionClosed(false)
-                    ->setTransactionId($response['orderCode'])
-                    ->setShouldCloseParentTransaction(false);
-                if ($payment->isCaptureFinal($amount)) {
-                    $payment->setShouldCloseParentTransaction(true);
-                }
-            }
-            else if ($response['paymentStatus'] == 'PRE_AUTHORIZED') {
-               $this->_debug('Order Request: ' . $response['orderCode']  . ' PRE_AUTHORIZED');
-                $payment->setAmount($amount);
-                $payment->setAdditionalInformation("worldpayOrderCode", $response['orderCode']);
-                $payment->setLastTransId($orderId);
-                $payment->setTransactionId($response['orderCode']);
-                $payment->setIsTransactionClosed(false);
-                $payment->setCcTransId($response['orderCode']);
-                $payment->save();
-                return $response['redirectURL'];
-            }
-            else {
-                if (isset($response['paymentStatusReason'])) {
-                    throw new \Exception($response['paymentStatusReason']);
-                } else {
-                    throw new \Exception(print_r($response, true));
-                }
-            }
+
+
+        $debug = Mage::getStoreConfig('payment/nihaopay/nihaopay_mode');
+        $token = $this->config->getServiceKey();
+    
+        $sOrderId = Mage::getSingleton('checkout/session')->getLastRealOrderId();
+        $oOrder = Mage::getModel('sales/order')->loadByIncrementId($sOrderId);
+        
+        $ipn = Mage::getUrl('nihaopay/securepay/ipn');
+        $callback = Mage::getUrl('nihaopay/securepay/callback');
+        $methodCode = $oOrder->getPayment()->getMethod();
+        $this->log('current method=' . $methodCode);
+        $vendor = this->myvendor();
+        
+        $requestor = new Requestor();
+        $requestor->setDebug($debug);
+        $ret = $requestor->getSecureForm($token, $vendor ,$oOrder,$ipn,$callback);
+
+        return $ret;
         }
         catch (\Exception $e) {
 
@@ -198,7 +186,7 @@ class WorldpayPayments extends AbstractMethod
             $this->_debug($e->getMessage());
             throw new \Exception('Payment failed, please try again later ' . $e->getMessage());
         }
-        return false;
+        
     }
 
     public function isTokenAllowed()
