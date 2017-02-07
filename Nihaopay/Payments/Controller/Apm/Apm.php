@@ -23,17 +23,7 @@ abstract class Apm extends \Magento\Framework\App\Action\Action
     protected $wordpayPaymentsCard;
 
     protected $methodCodes = [
-        'worldpay_payments_paypal',
-        'worldpay_payments_giropay',
-        'worldpay_payments_ideal',
-        'worldpay_payments_alipay',
-        'worldpay_payments_mistercash',
-        'worldpay_payments_przelewy24',
-        'worldpay_payments_paysafecard',
-        'worldpay_payments_postepay',
-        'worldpay_payments_qiwi',
-        'worldpay_payments_sofort',
-        'worldpay_payments_yandex'
+        'worldpay_payments_alipay'
     ];
 
     public function __construct(
