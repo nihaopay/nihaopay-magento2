@@ -1,6 +1,8 @@
 <?php
 
-require_once 'NihaoPay/Model/Error/Api.php';
+namespace Nihaopay\Payments\Model;
+
+require_once 'NihaoPay/Payments/Model/Error/Api.php';
 
 class CurlClient 
 {
