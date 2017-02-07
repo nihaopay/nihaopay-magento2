@@ -3,7 +3,7 @@
 //namespace GlidingEagle\Nihaopay\Model\Error;
 
 //use Exception;
-namespace Nihaopay\Payments\Model\Error;
+
 
 abstract class Error_Base extends Exception
 {
