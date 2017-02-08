@@ -158,21 +158,32 @@ class WorldpayPayments extends AbstractMethod
             ];
 
 
-        $debug = Mage::getStoreConfig('payment/nihaopay/nihaopay_mode');
+        $debug = $this->config->isLiveMode();
         $token = $this->config->getServiceKey();
     
-        $sOrderId = Mage::getSingleton('checkout/session')->getLastRealOrderId();
-        $oOrder = Mage::getModel('sales/order')->loadByIncrementId($sOrderId);
+        // $sOrderId = Mage::getSingleton('checkout/session')->getLastRealOrderId();
+        // $oOrder = Mage::getModel('sales/order')->loadByIncrementId($sOrderId);
         
-        $ipn = Mage::getUrl('nihaopay/securepay/ipn');
-        $callback = Mage::getUrl('nihaopay/securepay/callback');
-        $methodCode = $oOrder->getPayment()->getMethod();
-        $this->log('current method=' . $methodCode);
+        $ipn = $this->urlBuilder->getUrl('nihaopay/securepay/ipn', ['_secure' => true]);
+        $callback = $this->urlBuilder->getUrl('nihaopay/securepay/callback', ['_secure' => true]);
+
         $vendor = $this->myvendor();
+        
+        $params = array("amount"=>$$amount*100
+                ,"vendor"=>$vendor
+                ,"currency"=>$orderDetails['currencyCode']
+                ,"reference"=>$orderId
+                ,"ipn_url"=>$ipn
+                ,"callback_url"=>$callback
+                ,"terminal" => $this->ismobile()?'WAP':'ONLINE'
+                ,"description"=>$orderDetails['orderDescription']
+                ,"note"=>sprintf('#%s(%s)', $orderId, $orderDetails['shopperEmailAddress'])
+                );
+
         
         $requestor = new Requestor();
         $requestor->setDebug($debug);
-        $ret = $requestor->getSecureForm($token, $vendor ,$oOrder,$ipn,$callback);
+        $ret = $requestor->getSecureForm($token, $params);
 
         return $ret;
         }
@@ -186,6 +197,38 @@ class WorldpayPayments extends AbstractMethod
         }
         
     }
+
+    function ismobile() {
+        $is_mobile = '0';
+
+        if(preg_match('/(android|up.browser|up.link|mmp|symbian|smartphone|midp|wap|phone)/i', strtolower($_SERVER['HTTP_USER_AGENT']))) {
+            $is_mobile=1;
+        }
+
+        if((strpos(strtolower($_SERVER['HTTP_ACCEPT']),'application/vnd.wap.xhtml+xml')>0) or ((isset($_SERVER['HTTP_X_WAP_PROFILE']) or isset($_SERVER['HTTP_PROFILE'])))) {
+            $is_mobile=1;
+        }
+
+        $mobile_ua = strtolower(substr($_SERVER['HTTP_USER_AGENT'],0,4));
+        $mobile_agents = array('w3c ','acs-','alav','alca','amoi','andr','audi','avan','benq','bird','blac','blaz','brew','cell','cldc','cmd-','dang','doco','eric','hipt','inno','ipaq','java','jigs','kddi','keji','leno','lg-c','lg-d','lg-g','lge-','maui','maxo','midp','mits','mmef','mobi','mot-','moto','mwbp','nec-','newt','noki','oper','palm','pana','pant','phil','play','port','prox','qwap','sage','sams','sany','sch-','sec-','send','seri','sgh-','shar','sie-','siem','smal','smar','sony','sph-','symb','t-mo','teli','tim-','tosh','tsm-','upg1','upsi','vk-v','voda','wap-','wapa','wapi','wapp','wapr','webc','winw','winw','xda','xda-');
+
+        if(in_array($mobile_ua,$mobile_agents)) {
+            $is_mobile=1;
+        }
+
+        if (isset($_SERVER['ALL_HTTP'])) {
+            if (strpos(strtolower($_SERVER['ALL_HTTP']),'OperaMini')>0) {
+                $is_mobile=1;
+            }
+        }
+
+        if (strpos(strtolower($_SERVER['HTTP_USER_AGENT']),'windows')>0) {
+            $is_mobile=0;
+        }
+
+        return $is_mobile;
+    }
+
 
     protected function myvendor(){
         return "";
@@ -443,7 +486,7 @@ class WorldpayPayments extends AbstractMethod
         ];
 
 
-        $data['shopperIpAddress'] = \Worldpay\Utils::getClientIp();
+
         $data['shopperSessionId'] = $this->customerSession->getSessionId();
         $data['shopperUserAgent'] = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
         $data['shopperAcceptHeader'] = '*/*';
