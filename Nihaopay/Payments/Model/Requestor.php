@@ -1,6 +1,9 @@
 <?php
 namespace Nihaopay\Payments\Model;
 
+use Nihaopay\Payments\Model\Error\Error_Api;
+
+
 class Requestor
 {
 	private $debug = false;
