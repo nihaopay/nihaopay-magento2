@@ -315,67 +315,7 @@ class WorldpayPayments extends AbstractMethod
         throw new LocalizedException(__('You cannot cancel an APM order'));
     }
 
-    public function updateOrder($status, $orderCode, $order, $payment, $amount) {
-
-        if ($status === 'REFUNDED' || $status === 'SENT_FOR_REFUND') {
-            $payment
-            ->setTransactionId($orderCode)
-            ->setParentTransactionId($orderCode)
-            ->setIsTransactionClosed(true)
-            ->registerRefundNotification($amount);
-
-            $this->_debug('Order: ' .  $orderCode .' REFUNDED');
-        }
-        else if ($status === 'FAILED') {
-
-            $order->cancel()->setState(\Magento\Sales\Model\Order::STATE_CANCELED, true, 'Gateway has declined the payment.')->save();
-            $payment->setStatus(self::STATUS_DECLINED);
-
-            $this->_debug('Order: ' .  $orderCode .' FAILED');
-        }
-        else if ($status === 'SETTLED') {
-            $this->_debug('Order: ' .  $orderCode .' SETTLED');
-        }
-        else if ($status === 'AUTHORIZED') {
-            $payment
-                ->setTransactionId($orderCode)
-                ->setShouldCloseParentTransaction(1)
-                ->setIsTransactionClosed(0)
-                ->registerAuthorizationNotification($amount, true);
-            $this->_debug('Order: ' .  $orderCode .' AUTHORIZED');
-        }
-        else if ($status === 'SUCCESS') {
-            if($order->canInvoice()) {
-                $payment
-                ->setTransactionId($orderCode)
-                ->setShouldCloseParentTransaction(1)
-                ->setIsTransactionClosed(0);
-
-                $invoice = $order->prepareInvoice();
-                $invoice->setRequestedCaptureCase(\Magento\Sales\Model\Order\Invoice::CAPTURE_ONLINE);
-                $invoice->register();
-                
-                $transaction = $this->transactionFactory->create();
-                
-                $transaction->addObject($invoice)
-                ->addObject($invoice->getOrder())
-                ->save();
-                
-                $this->invoiceSender->send($invoice);
-                $order->addStatusHistoryComment(
-                    __('Notified customer about invoice #%1.', $invoice->getId())
-                )
-                ->setIsCustomerNotified(true);
-            }
-            $this->_debug('Order: ' .  $orderCode .' SUCCESS');
-        }
-        else {
-            // Unknown status
-            $order->addStatusHistoryComment('Unknown Worldpay Payment Status: ' . $status . ' for ' . $orderCode)
-           ->setIsCustomerNotified(true);
-        }
-        $order->save();
-    }
+    
 
     private function getCheckoutMethod($quote)
     {
