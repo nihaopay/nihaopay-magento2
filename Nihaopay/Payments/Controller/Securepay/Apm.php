@@ -18,6 +18,7 @@ abstract class Apm extends \Magento\Framework\App\Action\Action
     protected $resultJsonFactory;
 
     protected $orderFactory;
+    protected $logger;
     protected $methods = [];
 
     protected $wordpayPaymentsCard;
@@ -35,6 +36,8 @@ abstract class Apm extends \Magento\Framework\App\Action\Action
         \Magento\Checkout\Helper\Data $checkoutData,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Sales\Model\Order\Email\Sender\OrderSender $orderSender,
+        \Nihaopay\Payments\Logger\Logger $wpLogger,
+        \Nihaopay\Payments\Model\Config $config,
         $params = []
     )
     {
@@ -46,6 +49,15 @@ abstract class Apm extends \Magento\Framework\App\Action\Action
             $this->methods[$code] = $paymentHelper->getMethodInstance($code);
         }
         $this->resultJsonFactory = $resultJsonFactory;
+         $this->logger = $wpLogger;
+         $this->config = $config;
         parent::__construct($context);
+    }
+
+    protected function _debug($debugData)
+    {   
+        if ($this->config->debugMode($this->_code)) {
+            $this->logger->debug($debugData);
+        }
     }
 }
