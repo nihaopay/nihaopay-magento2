@@ -157,8 +157,13 @@ class WorldpayPayments extends AbstractMethod
                 'shopperEmailAddress' => $orderDetails['shopperEmailAddress']
             ];
 
-
-        $debug = $this->config->isLiveMode();
+        $debug = false;
+        if ($this->config->isLiveMode()) {
+            $debug = false;
+        }else{
+             $debug = true;
+        }
+        
         $token = $this->config->getServiceKey();
     
         // $sOrderId = Mage::getSingleton('checkout/session')->getLastRealOrderId();
