@@ -1,6 +1,6 @@
 <?php
 
-namespace Nihaopay\Payments\Controller\Apm;
+namespace Nihaopay\Payments\Controller\Securepay;
 use Magento\Payment\Helper\Data as PaymentHelper;
 
 abstract class Apm extends \Magento\Framework\App\Action\Action

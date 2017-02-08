@@ -1,6 +1,6 @@
 <?php
 
-namespace Nihaopay\Payments\Controller\Apm;
+namespace Nihaopay\Payments\Controller\Securepay;
 
 use Magento\Customer\Model\Session;
 use Magento\Framework\Controller\ResultFactory;
