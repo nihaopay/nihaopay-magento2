@@ -11,6 +11,17 @@ class Ipn extends Apm
 {
     public function execute()
     {
+        
+        // $order_id = '';
+        // $refs = explode('at',$data['reference']);
+        // //first item is order id
+        // if($refs !=null && is_array($refs)){
+        //     $order_id = $refs[0];       
+        // }else{
+        //     $this->log('reference code invalid:' . $data['reference']);
+        //     return;
+        // }
+
         $incrementId = $this->checkoutSession->getLastRealOrderId();
         
         $order = $this->orderFactory->create()->loadByIncrementId($incrementId);

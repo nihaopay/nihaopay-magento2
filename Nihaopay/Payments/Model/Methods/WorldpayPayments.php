@@ -177,7 +177,7 @@ class WorldpayPayments extends AbstractMethod
         $params = array("amount"=>$amount*100
                 ,"vendor"=>$vendor
                 ,"currency"=>$orderDetails['currencyCode']
-                ,"reference"=>$orderId
+                ,"reference"=> $this->getReferenceCode($orderId)
                 ,"ipn_url"=>$ipn
                 ,"callback_url"=>$callback
                 ,"terminal" => $this->ismobile()?'WAP':'ONLINE'
@@ -201,6 +201,12 @@ class WorldpayPayments extends AbstractMethod
             throw new \Exception('Payment failed, please try again later ' . $e->getMessage());
         }
         
+    }
+
+    function getReferenceCode($order_id){
+
+        $tmstemp = time();
+        return $order_id . 'at' . $tmstemp;
     }
 
     function ismobile() {
