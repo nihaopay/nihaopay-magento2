@@ -150,7 +150,6 @@ class WorldpayPayments extends AbstractMethod
                 'pendingUrl' =>$this->urlBuilder->getUrl('worldpay/apm/pending', ['_secure' => true]),
                 'failureUrl' => $this->urlBuilder->getUrl('worldpay/apm/failure', ['_secure' => true]),
                 'cancelUrl' => $this->urlBuilder->getUrl('worldpay/apm/cancel', ['_secure' => true]),
-                'shopperIpAddress' => $orderDetails['shopperIpAddress'],
                 'shopperSessionId' => $orderDetails['shopperSessionId'],
                 'shopperUserAgent' => $orderDetails['shopperUserAgent'],
                 'shopperAcceptHeader' => $orderDetails['shopperAcceptHeader'],
