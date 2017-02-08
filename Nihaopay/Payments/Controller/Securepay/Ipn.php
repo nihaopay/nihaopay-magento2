@@ -15,16 +15,6 @@ class Ipn extends Apm
         $this->_debug("enter ipn");
         $data = $this->getRequest()->getParams();
 
-        // $order_id = '';
-        // $refs = explode('at',$data['reference']);
-        // //first item is order id
-        // if($refs !=null && is_array($refs)){
-        //     $order_id = $refs[0];       
-        // }else{
-        //     $this->_debug('reference code invalid:' . $data['reference']);
-        //     return;
-        // }
-
         $this->processPayment($data);
         $this->_redirect('checkout/onepage/success');
         $this->_debug("leave ipn");
@@ -33,7 +23,7 @@ class Ipn extends Apm
 
 
     protected function processPayment($data){
-    
+        $this->_debug('reference : ' . $data['reference']);
         if(!isset($data['reference']) || !isset($data['status'])){
 
             $this->_debug("503 Service Unavailable");
@@ -49,8 +39,9 @@ class Ipn extends Apm
             $this->_debug('reference code invalid:' . $data['reference']);
             return;
         }
-
+        $this->_debug('order id : ' . $order_id);
         $order = $this->orderFactory->create()->loadByIncrementId($order_id);
+
         if (!$order->getId()) {
             $this->_debug("503 Service Unavailable");
             return;
