@@ -2,7 +2,7 @@
 
 namespace Nihaopay\Payments\Model\Error;
 
-//use Exception;
+use Exception;
 
 
 abstract class MyErrorBase extends Exception
