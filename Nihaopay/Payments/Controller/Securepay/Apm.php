@@ -56,8 +56,6 @@ abstract class Apm extends \Magento\Framework\App\Action\Action
 
     protected function _debug($debugData)
     {   
-        if ($this->config->debugMode($this->_code)) {
-            $this->logger->debug($debugData);
-        }
+         $this->logger->debug($debugData);
     }
 }
