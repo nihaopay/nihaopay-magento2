@@ -16,5 +16,5 @@ class Handler extends \Magento\Framework\Logger\Handler\Base
      * File name
      * @var string
      */
-    protected $fileName = '/var/log/worldpay.log';
+    protected $fileName = '/var/log/nihaopay.log';
 }

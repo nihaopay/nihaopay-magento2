@@ -112,7 +112,7 @@ class Requestor
     }
 	protected function log($msg)
     {
-        Mage::log("Requestor - ".$msg);
+        // Mage::log("Requestor - ".$msg);
     }    
     
     public function getSecureForm($token, $params){

@@ -8,6 +8,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Nihaopay\Payments\Model\Requestor;
 
 class WorldpayPayments extends AbstractMethod
 {
@@ -168,7 +169,7 @@ class WorldpayPayments extends AbstractMethod
 
         $vendor = $this->myvendor();
         
-        $params = array("amount"=>$$amount*100
+        $params = array("amount"=>$amount*100
                 ,"vendor"=>$vendor
                 ,"currency"=>$orderDetails['currencyCode']
                 ,"reference"=>$orderId

@@ -1,11 +1,11 @@
 <?php
 
-//namespace GlidingEagle\Nihaopay\Model\Error;
+namespace Nihaopay\Payments\Model\Error;
 
 //use Exception;
 
 
-abstract class MyError_Base extends Exception
+abstract class MyErrorBase extends Exception
 {
 
 	protected $params = null;
