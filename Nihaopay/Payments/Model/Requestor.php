@@ -1,8 +1,6 @@
 <?php
 namespace Nihaopay\Payments\Model;
 
-use Nihaopay\Payments\Model\Error\ErrorApi;
-
 
 class Requestor
 {
@@ -84,7 +82,8 @@ class Requestor
         } catch (Exception $e) {
             $msg = "Invalid response body from API: $rbody "
               . "(HTTP response code was $rcode)";
-            throw new ErrorApi($msg, $rcode, $rbody);
+            // throw new ErrorApi($msg, $rcode, $rbody);
+            throw new \Exception($msg);
         }
 
         if ($rcode < 200 || $rcode >= 300) {
@@ -103,7 +102,9 @@ class Requestor
         $msg = isset($resp['message']) ? $resp['message'] : null;
         $code = isset($error['code']) ? $error['code'] : null;
 
-        throw new ErrorApi($msg,$param, $rcode, $rbody, $resp, $rheaders);
+        // throw new ErrorApi($msg,$param, $rcode, $rbody, $resp, $rheaders);
+
+        throw new \Exception($msg);
 
     }
     
