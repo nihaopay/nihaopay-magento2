@@ -1,5 +1,5 @@
 <?php
-namespace Nihaopay\Payments\Controller\Apm;
+namespace Nihaopay\Payments\Controller\Securepay;
 
 use Magento\Checkout\Model\Session;
 use Magento\Sales\Model\OrderFactory;
