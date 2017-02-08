@@ -10,7 +10,7 @@ class Redirect extends Apm
 {
     public function execute() {
         
-        this->_debug("call redirect");
+        $this->_debug("call redirect");
         $myform = "";
         $result = $this->resultJsonFactory->create();
         $quote = $this->checkoutSession->getQuote();
