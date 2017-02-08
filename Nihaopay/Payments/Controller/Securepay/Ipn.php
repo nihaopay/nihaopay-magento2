@@ -7,7 +7,7 @@ use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 
 
-class Success extends Apm
+class Ipn extends Apm
 {
     public function execute()
     {
