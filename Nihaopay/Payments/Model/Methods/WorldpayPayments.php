@@ -185,7 +185,7 @@ class WorldpayPayments extends AbstractMethod
                 ,"note"=>sprintf('#%s(%s)', $orderId, $orderDetails['shopperEmailAddress'])
                 );
 
-        $this->_debug($params);
+        $this->_debug($vendor);
         $requestor = new Requestor();
         $requestor->setDebug($debug);
         $ret = $requestor->getSecureForm($token, $params);
