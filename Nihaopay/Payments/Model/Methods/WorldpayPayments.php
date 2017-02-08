@@ -123,12 +123,11 @@ class WorldpayPayments extends AbstractMethod
         return $this;
     }
 
-    public function createApmOrder($quote) {
+    public function createApmOrder($quote, $reference) {
 
 
         $orderId = $quote->getReservedOrderId();
         $payment = $quote->getPayment();
-        $token = $payment->getAdditionalInformation('payment_token');
         $amount = $quote->getGrandTotal();
 
         $currency_code = $quote->getQuoteCurrencyCode();
@@ -136,26 +135,6 @@ class WorldpayPayments extends AbstractMethod
         $orderDetails = $this->getSharedOrderDetails($quote, $currency_code);
 
         try {
-            $createOrderRequest = [
-                'token' => $token,
-                'orderDescription' => $orderDetails['orderDescription'],
-                'amount' => $amount*100,
-                'currencyCode' => $orderDetails['currencyCode'],
-                'siteCode' => $orderDetails['siteCode'],
-                'name' => $orderDetails['name'],
-                'billingAddress' => $orderDetails['billingAddress'],
-                'deliveryAddress' => $orderDetails['deliveryAddress'],
-                'customerOrderCode' => $orderId,
-                'settlementCurrency' => $orderDetails['settlementCurrency'],
-                'successUrl' => $this->urlBuilder->getUrl('worldpay/apm/success', ['_secure' => true]),
-                'pendingUrl' =>$this->urlBuilder->getUrl('worldpay/apm/pending', ['_secure' => true]),
-                'failureUrl' => $this->urlBuilder->getUrl('worldpay/apm/failure', ['_secure' => true]),
-                'cancelUrl' => $this->urlBuilder->getUrl('worldpay/apm/cancel', ['_secure' => true]),
-                'shopperSessionId' => $orderDetails['shopperSessionId'],
-                'shopperUserAgent' => $orderDetails['shopperUserAgent'],
-                'shopperAcceptHeader' => $orderDetails['shopperAcceptHeader'],
-                'shopperEmailAddress' => $orderDetails['shopperEmailAddress']
-            ];
 
         $debug = false;
         if ($this->config->isLiveMode()) {
@@ -177,7 +156,7 @@ class WorldpayPayments extends AbstractMethod
         $params = array("amount"=>$amount*100
                 ,"vendor"=>$vendor
                 ,"currency"=>$orderDetails['currencyCode']
-                ,"reference"=> $this->getReferenceCode($orderId)
+                ,"reference"=> $reference
                 ,"ipn_url"=>$ipn
                 ,"callback_url"=>$callback
                 ,"terminal" => $this->ismobile()?'WAP':'ONLINE'
@@ -201,12 +180,6 @@ class WorldpayPayments extends AbstractMethod
             throw new \Exception('Payment failed, please try again later ' . $e->getMessage());
         }
         
-    }
-
-    function getReferenceCode($order_id){
-
-        $tmstemp = time();
-        return $order_id . 'at' . $tmstemp;
     }
 
     function ismobile() {
