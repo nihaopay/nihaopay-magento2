@@ -4,7 +4,7 @@ define(
      [
         'jquery',
         'Magento_Checkout/js/view/payment/default',
-        'worldpay',
+        'nihaopay',
         'Magento_Checkout/js/action/set-payment-information',
         'Magento_Checkout/js/model/full-screen-loader',
         'Magento_Checkout/js/checkout-data',
