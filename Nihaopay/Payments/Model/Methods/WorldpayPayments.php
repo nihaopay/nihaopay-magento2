@@ -285,6 +285,7 @@ class WorldpayPayments extends AbstractMethod
 
     public function cancel(InfoInterface $payment)
     {
+         $this->_debug("call cancel action");
         throw new LocalizedException(__('You cannot cancel an APM order'));
     }
 
