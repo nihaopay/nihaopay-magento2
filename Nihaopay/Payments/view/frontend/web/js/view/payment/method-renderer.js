@@ -16,18 +16,9 @@ define(
         var idealComponent = 'Nihaopay_Payments/js/view/payment/method-renderer/ideal';
 
         var methods = [
-            {type: 'nihaopay_payments_card', component: defaultComponent},
-            {type: 'nihaopay_payments_paypal', component: apmComponent},
-            {type: 'nihaopay_payments_giropay', component: giropayComponent},
-            {type: 'nihaopay_payments_alipay', component: apmComponent},
-            {type: 'nihaopay_payments_mistercash', component: apmComponent},
-            {type: 'nihaopay_payments_przelewy24', component: apmComponent},
-            {type: 'nihaopay_payments_paysafecard', component: apmComponent},
-            {type: 'nihaopay_payments_postepay', component: apmComponent},
-            {type: 'nihaopay_payments_qiwi', component: apmComponent},
-            {type: 'nihaopay_payments_sofort', component: apmComponent},
-            {type: 'nihaopay_payments_yandex', component: apmComponent},
-            {type: 'nihaopay_payments_ideal', component: idealComponent}
+             {type: 'nihaopay_payments_alipay', component: apmComponent},
+             {type: 'nihaopay_payments_wechatpay', component: apmComponent},
+             {type: 'nihaopay_payments_unionpay', component: apmComponent},
         ];
         $.each(methods, function (k, method) {
             rendererList.push(method);
