@@ -15,7 +15,15 @@ class Callback extends Apm
         $data = $this->getRequest()->getParams();
         if(isset($data['status']) && $data['status']=='success'){
         	 $this->_debug("success callback");
-        	$this->_redirect('checkout/onepage/success');
+
+        $incrementId = $this->checkoutSession->getLastRealOrderId();
+        
+        $order = $this->orderFactory->create()->loadByIncrementId($incrementId);
+
+        $quoteId = $order->getQuoteId();
+        $this->checkoutSession->setLastQuoteId($quoteId)->setLastSuccessQuoteId($quoteId);
+
+    	$this->_redirect('checkout/onepage/success');
 
         }
         
