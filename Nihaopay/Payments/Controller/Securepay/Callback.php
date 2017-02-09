@@ -18,8 +18,6 @@ class Callback extends Apm
         	$this->_redirect('checkout/onepage/success');
 
         }
-
-        $this->_debug("leave callback");
         
     }
 }
