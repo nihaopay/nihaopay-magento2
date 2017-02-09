@@ -50,9 +50,7 @@ class Redirect extends Apm
             __('Redirecting user with Nihaopay Order Code  #%1.', $reference)
         )->setIsCustomerNotified(false)->save();
 
-        // $this->checkoutSession->restoreQuote();
-
-        // $this->methods[$code]->sendMagentoOrder($order);
+        $this->methods[$code]->sendMagentoOrder($order);
 
         $this->getResponse()->appendBody($myform);
 
