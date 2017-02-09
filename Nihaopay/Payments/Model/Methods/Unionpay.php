@@ -1,13 +1,12 @@
 <?php
 namespace Nihaopay\Payments\Model\Methods;
 
-class Sofort extends WorldpayPayments {
+class Unionpay extends WorldpayPayments {
 
-	protected $_code = 'worldpay_payments_sofort';
+	protected $_code = 'nihaopay_payments_unionpay';
 	protected $_canUseInternal = false;
 	protected $_canAuthorize = false;
     protected $_canCapture = true;
     protected $_canRefund = true;
-	protected $_formBlockType = 'worldpay/payment_sofortForm';
     protected $_isGateway = true;
 }

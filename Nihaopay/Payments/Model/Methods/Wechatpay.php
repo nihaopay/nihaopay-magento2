@@ -1,13 +1,17 @@
 <?php
+
 namespace Nihaopay\Payments\Model\Methods;
 
-class P24 extends WorldpayPayments {
 
-	protected $_code = 'worldpay_payments_p24';
+
+class Wechatpay extends WorldpayPayments {
+
+	protected $_code = 'nihaopay_payments_wechatpay';
 	protected $_canUseInternal = false;
 	protected $_canAuthorize = false;
     protected $_canCapture = true;
     protected $_canRefund = true;
-	protected $_formBlockType = 'worldpay/payment_p24Form';
+	protected $_formBlockType = 'worldpay/payment_giropayForm';
     protected $_isGateway = true;
 }
+

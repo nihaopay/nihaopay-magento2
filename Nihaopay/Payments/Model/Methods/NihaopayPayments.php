@@ -10,7 +10,7 @@ use Magento\Payment\Model\InfoInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Nihaopay\Payments\Model\Requestor;
 
-class WorldpayPayments extends AbstractMethod
+class NihaopayPayments extends AbstractMethod
 {
     protected $_isInitializeNeeded = true;
     protected $_isGateway = true;

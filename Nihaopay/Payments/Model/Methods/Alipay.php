@@ -1,7 +1,7 @@
 <?php
 namespace Nihaopay\Payments\Model\Methods;
 
-class Alipay extends WorldpayPayments {
+class Alipay extends NihaopayPayments {
 
 	protected $_code = 'nihaopay_payments_alipay';
 	protected $_canUseInternal = false;
