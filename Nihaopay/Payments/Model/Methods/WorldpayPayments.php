@@ -249,19 +249,30 @@ class WorldpayPayments extends AbstractMethod
 
     public function refund(InfoInterface $payment, $amount)
     {
+         $this->_debug("call refund");
         if ($order = $payment->getOrder()) {
-            $worldpay = $this->setupWorldpay();
+           
             try {
-                $grandTotal = $order->getGrandTotal();
-                $a = $payment->getAdditionalInformation("worldpayOrderCode");
-                if ($grandTotal == $amount) {
-                    $worldpay->refundOrder($payment->getAdditionalInformation("worldpayOrderCode"));
-                } else {
-                    $worldpay->refundOrder($payment->getAdditionalInformation("worldpayOrderCode"), $amount * 100);
+
+                $debug = false;
+                if ($this->config->isLiveMode()) {
+                    $debug = false;
+                }else{
+                     $debug = true;
                 }
+                
+                $token = $this->config->getServiceKey();
+
+                $requestor = new Requestor();
+                $requestor->setDebug($debug);
+                $ret = $requestor->refund($token,$payment,$amount);
+
+                $this->_debug("leave call refund");
+
                 return $this;
             }
             catch (\Exception $e) {
+                $this->_debug("call refund fail");
                 $a = $e->getMessage();
                 throw new LocalizedException(__('Refund failed ' . $e->getMessage()));
             }
