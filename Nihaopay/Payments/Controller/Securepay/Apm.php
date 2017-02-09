@@ -29,7 +29,6 @@ abstract class Apm extends \Magento\Framework\App\Action\Action
 
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
-        \Nihaopay\Payments\Model\Methods\WorldpayPayments $Worldpay,
         PaymentHelper $paymentHelper,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
