@@ -53,7 +53,6 @@ class NihaopayPayments extends AbstractMethod
         \Magento\Sales\Model\Order\Email\Sender\InvoiceSender $invoiceSender,
         \Magento\Framework\DB\TransactionFactory $transactionFactory,
         \Magento\Customer\Model\Session $customerSession,
-        \Nihaopay\Payments\Model\Resource\SavedCard\CollectionFactory $savedCardFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Checkout\Helper\Data $checkoutData,
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
