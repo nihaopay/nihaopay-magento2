@@ -9,19 +9,19 @@
           <model>Nihaopay\Payments\Model\Methods\Alipay</model>
         </nihaopay_payments_alipay>
     </payment>
-     <nihaopay_payments_alipay>
+     <nihaopay_payments_wechatpay>
           <active>0</active>
           <title>WechatPay</title>
           <enable_logging>0</enable_logging>
           <model>Nihaopay\Payments\Model\Methods\Wechatpay</model>
-        </nihaopay_payments_alipay>
+        </nihaopay_payments_wechatpay>
     </payment>
-     <nihaopay_payments_alipay>
+     <nihaopay_payments_unionpay>
           <active>0</active>
           <title>UnionPay</title>
           <enable_logging>0</enable_logging>
           <model>Nihaopay\Payments\Model\Methods\Unionpay</model>
-        </nihaopay_payments_alipay>
+      </nihaopay_payments_unionpay>
     </payment>
   </default>
 </config>
