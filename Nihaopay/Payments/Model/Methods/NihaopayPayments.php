@@ -231,20 +231,6 @@ class NihaopayPayments extends AbstractMethod
         return $this;
     }
 
-    public function setupWorldpay() {
-        $service_key = $this->config->getServiceKey();
-        $worldpay = new \Worldpay\Worldpay($service_key);
-
-        $worldpay->setPluginData('Magento2', '2.0.25');
-        \Worldpay\Utils::setThreeDSShopperObject([
-            'shopperIpAddress' => \Worldpay\Utils::getClientIp(),
-            'shopperSessionId' => $this->customerSession->getSessionId(),
-            'shopperUserAgent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '',
-            'shopperAcceptHeader' => '*/*'
-        ]);
-        return $worldpay;
-    }
-
     public function refund(InfoInterface $payment, $amount)
     {
          $this->_debug("call refund");
@@ -279,16 +265,6 @@ class NihaopayPayments extends AbstractMethod
 
     public function void(InfoInterface $payment)
     {
-        $worldpayOrderCode = $payment->getAdditionalInformation('worldpayOrderCode');
-        $worldpay = $this->setupWorldpay();
-        if ($worldpayOrderCode) {
-            try {
-                $worldpay->cancelAuthorizedOrder($worldpayOrderCode);
-            }
-            catch (\Exception $e) {
-                throw new LocalizedException(__('Void failed, please try again later ' . $e->getMessage()));
-            }
-        }
         return true;
     }
 
