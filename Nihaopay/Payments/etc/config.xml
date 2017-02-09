@@ -4,9 +4,23 @@
     <payment>
       <nihaopay_payments_alipay>
           <active>0</active>
-          <title>Nihaopay Alipay</title>
+          <title>AliPay</title>
           <enable_logging>0</enable_logging>
           <model>Nihaopay\Payments\Model\Methods\Alipay</model>
+        </nihaopay_payments_alipay>
+    </payment>
+     <nihaopay_payments_alipay>
+          <active>0</active>
+          <title>WechatPay</title>
+          <enable_logging>0</enable_logging>
+          <model>Nihaopay\Payments\Model\Methods\Wechatpay</model>
+        </nihaopay_payments_alipay>
+    </payment>
+     <nihaopay_payments_alipay>
+          <active>0</active>
+          <title>UnionPay</title>
+          <enable_logging>0</enable_logging>
+          <model>Nihaopay\Payments\Model\Methods\Unionpay</model>
         </nihaopay_payments_alipay>
     </payment>
   </default>
