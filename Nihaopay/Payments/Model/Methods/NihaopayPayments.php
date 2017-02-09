@@ -29,7 +29,7 @@ class NihaopayPayments extends AbstractMethod
     protected $invoiceSender;
     protected $transactionFactory;
     protected $customerSession;
-    protected $savedCardFactory;
+
     protected $checkoutSession;
     protected $checkoutData;
     protected $quoteRepository;
@@ -85,7 +85,6 @@ class NihaopayPayments extends AbstractMethod
         $this->invoiceSender = $invoiceSender;
         $this->transactionFactory = $transactionFactory;
         $this->customerSession = $customerSession;
-        $this->savedCardFactory = $savedCardFactory;
         $this->checkoutSession = $checkoutSession;
         $this->checkoutData = $checkoutData;
         $this->quoteRepository = $quoteRepository;
