@@ -29,28 +29,26 @@ class Redirect extends Apm
             ]);
         }
 
-        $incrementId = $this->checkoutSession->getLastRealOrderId();
+        try {
+            $order = $this->methods[$code]->createMagentoOrder($quote);
+        }
+        catch(\Exception $e) {
+            return $result->setData([
+                'success' => false,
+                'error' => $e->getMessage()
+            ]);
+        }
 
-        // try {
-        //     $order = $this->methods[$code]->createMagentoOrder($quote);
-        // }
-        // catch(\Exception $e) {
-        //     return $result->setData([
-        //         'success' => false,
-        //         'error' => $e->getMessage()
-        //     ]);
-        // }
+        if (!$order) {
+            return $result->setData([
+                'success' => false,
+                'error' => 'Error, please try again'
+            ]);
+        }
 
-        // if (!$order) {
-        //     return $result->setData([
-        //         'success' => false,
-        //         'error' => 'Error, please try again'
-        //     ]);
-        // }
-
-        // $order->addStatusHistoryComment(
-        //     __('Redirecting user with Nihaopay Order Code  #%1.', $reference)
-        // )->setIsCustomerNotified(false)->save();
+        $order->addStatusHistoryComment(
+            __('Redirecting user with Nihaopay Order Code  #%1.', $reference)
+        )->setIsCustomerNotified(false)->save();
 
         // $this->checkoutSession->restoreQuote();
 
