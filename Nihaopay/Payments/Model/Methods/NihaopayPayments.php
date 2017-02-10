@@ -106,6 +106,10 @@ class NihaopayPayments extends AbstractMethod
         return $this->urlBuilder->getUrl('nihaopay/securepay/redirect', ['_secure' => true]);
     }
 
+    public function getAjaxCheckStatus() {
+        return $this->urlBuilder->getUrl('nihaopay/securepay/checkstatus', ['_secure' => true]);
+    }
+
     public function assignData(\Magento\Framework\DataObject $data)
     {
         parent::assignData($data);

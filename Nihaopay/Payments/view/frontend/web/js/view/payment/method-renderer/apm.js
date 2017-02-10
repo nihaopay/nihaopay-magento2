@@ -25,9 +25,7 @@ define(
                 return this;
             },
             createToken: function(element, event, extraInput) {
-                 
-
-
+                  
                  $.when(setPaymentInformationAction(this.messageContainer, {
                     'method': this.getCode(),
                     'additional_data': {
@@ -35,7 +33,29 @@ define(
                     }
                     })).done(function () {
                         fullScreenLoader.startLoader();
-                        $.mage.redirect(wpConfig.redirect_url);
+
+                        $.ajax({
+                            type: 'POST',
+                            url: wpConfig.ajax_check_status_url,
+                            success: function (response) {
+                                if (response.success) {
+                                    $.mage.redirect(wpConfig.redirect_url);
+                                } else {
+                                    self.messageContainer.addErrorMessage({
+                                        message: response.error || "Error, please try again"
+                                    });
+                                    fullScreenLoader.stopLoader();
+                                }
+                            },
+                            error: function (response) {
+                                fullScreenLoader.stopLoader();
+                                self.messageContainer.addErrorMessage({
+                                    message: "Error, please try again"
+                                });
+                            }
+                        });
+
+
                     }).fail(function () {
                         this.isPlaceOrderActionAllowed(true);
                     });

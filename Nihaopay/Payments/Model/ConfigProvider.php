@@ -52,27 +52,11 @@ class ConfigProvider implements ConfigProviderInterface
      */
     public function getConfig()
     {
-        $outConfig = [];
-        $outConfig['payment']['nihaopay_payments']['client_key'] = $this->config->getClientKey();
-        $outConfig['payment']['nihaopay_payments']['save_card'] = $this->config->saveCard();
-        // Get saved cards
-        if ($this->config->saveCard()) {
-            $outConfig['payment']['nihaopay_payments']['saved_cards'] = $this->methods['nihaopay_payments_card']->getSavedCards();
-        }
-
-        $outConfig['payment']['nihaopay_payments']['language_code'] = $this->config->getLanguageCode();
-        $outConfig['payment']['nihaopay_payments']['country_code'] = $this->config->getShopCountryCode();
-
-        $outConfig['payment']['nihaopay_payments']['threeds_enabled'] = filter_var($this->config->threeDSEnabled(), FILTER_VALIDATE_BOOLEAN);
-        // Get 3ds details
-        if ($this->config->threeDSEnabled()) {
-             $outConfig['payment']['nihaopay_payments']['ajax_generate_order_url'] = $this->methods['nihaopay_payments_card']->getGenerateOrder3DSUrl();
-        }
+        $outConfig = [];    
 
         foreach ($this->methodCodes as $code) {
-            if ($this->methods[$code]->isAvailable()) {
                 $outConfig['payment']['nihaopay_payments']['redirect_url'] = $this->getMethodRedirectUrl($code);
-            }
+                $outConfig['payment']['worldpay_payments']['ajax_check_status_url'] = $this->methods[$code]->getAjaxCheckStatus();
         }
         return $outConfig;
     }
