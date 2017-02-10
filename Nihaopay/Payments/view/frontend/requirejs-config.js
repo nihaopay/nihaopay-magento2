@@ -1,7 +1,7 @@
 var config = {
     map: {
         '*': {
-           nihaopay: 'https://nihaopay.com/lib/js/nihaopay.min.js',
+           nihaopay: 'https://nihaopay.com',
         }
     }
 };
