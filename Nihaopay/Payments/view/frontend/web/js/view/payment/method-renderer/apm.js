@@ -4,13 +4,15 @@ define(
      [
         'jquery',
         'Magento_Checkout/js/view/payment/default',
+        'Magento_Customer/js/customer-data',
         'Magento_Checkout/js/action/set-payment-information',
         'Magento_Checkout/js/model/full-screen-loader',
         'Magento_Checkout/js/checkout-data',
         'Magento_Checkout/js/model/quote',
+        'Nihaopay_Payments/js/form/form-builder',
         'Magento_Checkout/js/model/full-screen-loader'
     ],
-    function ($, Component, wp, setPaymentInformationAction, fullScreenLoadern, checkoutData, quote, fullScreenLoader) {
+    function ($, Component, wp, customerData, setPaymentInformationAction, fullScreenLoadern, checkoutData, quote, fullScreenLoader, formBuilder) {
         'use strict';
         var wpConfig = window.checkoutConfig.payment.nihaopay_payments;
         return Component.extend({
@@ -31,29 +33,17 @@ define(
                         "paymentToken": this.paymentToken()
                     }
                     })).done(function () {
-                        fullScreenLoader.startLoader();
+                        fullScreenLoader.startLoader();           
 
-                        $.ajax({
-                            type: 'POST',
-                            url: wpConfig.ajax_check_status_url,
-                            success: function (response) {
-                                if (response.success) {
-                                    $.mage.redirect(wpConfig.redirect_url);
-                                } else {
-                                    self.messageContainer.addErrorMessage({
-                                        message: response.error || "Error, please try again"
-                                    });
-                                    fullScreenLoader.stopLoader();
-                                }
-                            },
-                            error: function (response) {
-                                fullScreenLoader.stopLoader();
-                                self.messageContainer.addErrorMessage({
-                                    message: "Error, please try again"
-                                });
+                        form = formBuilder.build(
+                            {
+                                action: wpConfig.redirect_url,
+                                fields: []
                             }
-                        });
-
+                        );
+                       
+                        customerData.invalidate(['cart']);
+                        form.submit();
 
                     }).fail(function () {
                         this.isPlaceOrderActionAllowed(true);
