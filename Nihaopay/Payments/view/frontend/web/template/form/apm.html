@@ -13,10 +13,9 @@
         <!-- ko foreach: getRegion('messages') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
         <!--/ko-->
-        <div class="payment-method-billing-address">
-            <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
-            <!-- ko template: getTemplate() --><!-- /ko -->
-            <!--/ko-->
+        <div class="card-logos">
+                <img class="card-logo" alt="Visa" src="<?php echo $this->getSkinUrl('images/nihaopay_alipay/logo_en_US.png'); ?>"/>
+               
         </div>
         <form id="worldpay-payments-card-form" class="form form-purchase-order" data-role="purchaseorder-form">
             <fieldset class="fieldset payment method" data-bind='attr: {id: "payment_form_" + getCode()}'>
