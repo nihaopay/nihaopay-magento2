@@ -1,6 +1,6 @@
 {
     "name": "nihaopay/magento2-module-payments",
-    "description": "Worldpay Payments",
+    "description": "Nihaopay Payments",
     "require": {
         "php": "~5.5.0|~5.6.0|~7.0.0",
         "magento/magento-composer-installer": "*",
