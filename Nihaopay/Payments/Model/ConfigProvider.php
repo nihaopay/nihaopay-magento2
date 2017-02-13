@@ -81,8 +81,8 @@ class ConfigProvider implements ConfigProviderInterface
     public function getSkinImagePlaceholderPath()
     {
         $staticPath = $this->_storeManager->getStore()->getBaseStaticDir();
-        $placeholderPath = $this->_assetRepo->createAsset("images/nihaopay_alipay/logo_en_US.png")->getPath();
-        return $staticPath . '/' . $placeholderPath. '/' ."logo_en_US.png";
+        // $placeholderPath = $this->_assetRepo->createAsset("images/nihaopay_alipay/logo_en_US.png")->getPath();
+        return $staticPath . '/' ."Nihaopay_Payments/images/nihaopay_alipay/logo_en_US.png";
     }
 
 
