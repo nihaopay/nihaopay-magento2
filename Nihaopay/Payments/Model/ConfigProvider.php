@@ -61,7 +61,7 @@ class ConfigProvider implements ConfigProviderInterface
         foreach ($this->methodCodes as $code) {
                 $outConfig['payment']['nihaopay_payments']['redirect_url'] = $this->getMethodRedirectUrl($code);
 
-                $outConfig['payment']['nihaopay_payments'][$code] = $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_STATIC)."hello.png";
+                $outConfig['payment']['nihaopay_payments'][$code] = $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_STATIC)."Nihaopay_Payments/images/nihaopay_alipay/logo_en_US.png";
         }
         return $outConfig;
     }
