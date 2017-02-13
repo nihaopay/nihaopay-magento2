@@ -34,18 +34,25 @@ class ConfigProvider implements ConfigProviderInterface
     protected $_storeManager;
 
     /**
+     * @var \Magento\Framework\View\Asset\Repository
+     */
+    protected $_assetRepo;
+
+    /**
      * @param PaymentHelper $paymentHelper
      * @param Escaper $escaper
      */
     public function __construct(
         PaymentHelper $paymentHelper,
         Escaper $escaper,
-         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\View\Asset\Repository $assetRepo,
         Config $config
     ) {
         $this->escaper = $escaper;
         $this->config = $config;
         $this->_storeManager=$storeManager;
+         $this->_assetRepo = $assetRepo;
         foreach ($this->methodCodes as $code) {
             $this->methods[$code] = $paymentHelper->getMethodInstance($code);
         }
