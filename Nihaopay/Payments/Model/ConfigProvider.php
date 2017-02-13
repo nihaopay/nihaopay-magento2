@@ -31,6 +31,8 @@ class ConfigProvider implements ConfigProviderInterface
      */
     protected $config;
 
+    protected $_storeManager;
+
     /**
      * @param PaymentHelper $paymentHelper
      * @param Escaper $escaper
@@ -38,10 +40,12 @@ class ConfigProvider implements ConfigProviderInterface
     public function __construct(
         PaymentHelper $paymentHelper,
         Escaper $escaper,
+         \Magento\Store\Model\StoreManagerInterface $storeManager,
         Config $config
     ) {
         $this->escaper = $escaper;
         $this->config = $config;
+        $this->_storeManager=$storeManager;
         foreach ($this->methodCodes as $code) {
             $this->methods[$code] = $paymentHelper->getMethodInstance($code);
         }
@@ -56,7 +60,8 @@ class ConfigProvider implements ConfigProviderInterface
 
         foreach ($this->methodCodes as $code) {
                 $outConfig['payment']['nihaopay_payments']['redirect_url'] = $this->getMethodRedirectUrl($code);
-                $outConfig['payment']['worldpay_payments']['ajax_check_status_url'] = $this->methods[$code]->getAjaxCheckStatus();
+
+                $outConfig['payment']['nihaopay_payments'][$code] = $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_STATIC)."hello.png";
         }
         return $outConfig;
     }
