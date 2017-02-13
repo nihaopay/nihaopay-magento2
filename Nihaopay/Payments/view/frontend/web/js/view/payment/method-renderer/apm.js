@@ -58,7 +58,9 @@ define(
                     }
                 };
             },
-            getImageUrl: wpConfig[this.item.method],
+            getImageUrl: function() {
+                return wpConfig[this.item.method];
+            },
             getName: function() {
                 return this.item.title;
             }

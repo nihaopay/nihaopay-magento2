@@ -9,9 +9,9 @@
         </label>
     </div>
    <div class="card-logos">
-                <img  alt="Visa" data-bind="attr: {src: imageUrl}"/>
+                <img  alt="Visa" data-bind="attr: {'src': getImageUrl()}, src: getImageUrl()"/>
                
-    </div>
+        </div>
     <div class="payment-method-content">
         <!-- ko foreach: getRegion('messages') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
