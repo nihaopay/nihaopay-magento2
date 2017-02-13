@@ -59,7 +59,7 @@ define(
                 };
             },
             getImageUrl: function() {
-                return wpConfig.test_url;
+                return wpConfig[this.item.method];
             },
             getName: function() {
                 return this.item.title;
