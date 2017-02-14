@@ -21,4 +21,4 @@ class Wechatpay extends NihaopayPayments {
     public function getImageUrl(){
         return "Nihaopay_Payments/images/nihaopay_wechatpay/logo_en_US.png";
     }
-
+}
