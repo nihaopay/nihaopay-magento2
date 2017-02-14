@@ -68,7 +68,7 @@ class ConfigProvider implements ConfigProviderInterface
         foreach ($this->methodCodes as $code) {
                 $outConfig['payment']['nihaopay_payments']['redirect_url'] = $this->getMethodRedirectUrl($code);
 
-                $outConfig['payment']['nihaopay_payments'][$code] = $this->getSkinImagePlaceholderPath();
+                $outConfig['payment']['nihaopay_payments'][$code] = $this->getSkinImagePlaceholderPath($code);
         }
         return $outConfig;
     }
@@ -78,7 +78,7 @@ class ConfigProvider implements ConfigProviderInterface
      *
      * @return string
      */
-    public function getSkinImagePlaceholderPath()
+    public function getSkinImagePlaceholderPath($code)
     {
         $staticPath = $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_STATIC);
         $myurl = $this->methods[$code]->getImageUrl();
