@@ -17,5 +17,8 @@ class Wechatpay extends NihaopayPayments {
     protected function myvendor(){
     	return "wechatpay";
     }
-}
+
+    public function getImageUrl(){
+        return "Nihaopay_Payments/images/nihaopay_wechatpay/logo_en_US.png";
+    }
 

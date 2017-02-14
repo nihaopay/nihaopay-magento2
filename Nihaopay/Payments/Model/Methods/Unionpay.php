@@ -13,4 +13,8 @@ class Unionpay extends NihaopayPayments {
     protected function myvendor(){
     	return "unionpay";
     }
+
+    public function getImageUrl(){
+        return "Nihaopay_Payments/images/nihaopay_unionpay/logo_en_US.png";
+    }
 }

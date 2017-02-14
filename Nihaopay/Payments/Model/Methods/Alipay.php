@@ -14,4 +14,8 @@ class Alipay extends NihaopayPayments {
     protected function myvendor(){
     	return "alipay";
     }
+
+    public function getImageUrl(){
+        return "Nihaopay_Payments/images/nihaopay_alipay/logo_en_US.png";
+    }
 }

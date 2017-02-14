@@ -81,7 +81,8 @@ class ConfigProvider implements ConfigProviderInterface
     public function getSkinImagePlaceholderPath()
     {
         $staticPath = $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_STATIC);
-        $placeholderPath = $this->_assetRepo->createAsset("Nihaopay_Payments/images/nihaopay_alipay/logo_en_US.png")->getPath();
+        $myurl = $this->methods[$code]->getImageUrl();
+        $placeholderPath = $this->_assetRepo->createAsset($myurl)->getPath();
         return $staticPath . '/' . $placeholderPath;
     }
 
