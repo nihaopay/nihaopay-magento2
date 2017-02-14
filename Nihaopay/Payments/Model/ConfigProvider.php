@@ -12,7 +12,7 @@ class ConfigProvider implements ConfigProviderInterface
      * @var string[]
      */
     protected $methodCodes = [
-        'nihaopay_payments_alipay'
+        'nihaopay_payments_alipay',"nihaopay_payments_wechatpay","nihaopay_payments_unionpay"
     ];
 
 
