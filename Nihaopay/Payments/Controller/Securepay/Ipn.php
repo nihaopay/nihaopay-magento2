@@ -69,14 +69,14 @@ class Ipn extends Apm
         $order->save();
 
         // // notify customer
-        // $invoice = $payment->getCreatedInvoice();
-        // if ($invoice && !$order->getEmailSent()) {
-        //     $order->queueNewOrderEmail()->addStatusHistoryComment(
-        //         $this->__('Notified customer about invoice #%s.', $invoice->getIncrementId())
-        //     )
-        //     ->setIsCustomerNotified(true)
-        //     ->save();
-        // }   
+        $invoice = $payment->getCreatedInvoice();
+        if ($invoice && !$order->getEmailSent()) {
+            $order->queueNewOrderEmail()->addStatusHistoryComment(
+                $this->__('Notified customer about invoice #%s.', $invoice->getIncrementId())
+            )
+            ->setIsCustomerNotified(true)
+            ->save();
+        }   
     }
     
     protected function failIPN($order,$data){

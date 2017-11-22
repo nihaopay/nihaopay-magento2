@@ -363,14 +363,11 @@ class NihaopayPayments extends AbstractMethod
 
         $billing = $quote->getBillingAddress();
         $shipping = $quote->getShippingAddress();
+        $items = $quote->getAllItems();
 
         $data = [];
 
-        $data['orderDescription'] = $this->config->getPaymentDescription();
-
-        if (!$data['orderDescription']) {
-            $data['orderDescription'] = "Magento 2 Order";
-        }
+       
 
         $data['currencyCode'] = $currencyCode;
         $data['name'] = $billing->getName();
@@ -399,7 +396,13 @@ class NihaopayPayments extends AbstractMethod
             "telephoneNumber"=>$shipping->getTelephone()
         ];
 
-
+        $Product='';
+ 
+        foreach($items as $item) {
+            $Product = $item->getName().'...';
+            break;
+        }
+        $data['orderDescription'] = $Product;
 
         $data['shopperSessionId'] = $this->customerSession->getSessionId();
         $data['shopperUserAgent'] = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';

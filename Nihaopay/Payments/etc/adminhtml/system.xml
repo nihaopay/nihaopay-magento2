@@ -39,6 +39,10 @@
                 <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 <config_path>payment/nihaopay_payments_alipay/debug</config_path>
             </field>
+            <field id="sort_order" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Sort Order</label>
+                <config_path>payment/nihaopay_payments_unionpay/sort_order</config_path>
+            </field>
         </group>
 
         <group id="nihaopay_payments_wechatpay" translate="label" sortOrder="400" type="text" showInDefault="1" showInWebsite="1">
@@ -56,6 +60,10 @@
                 <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 <config_path>payment/nihaopay_payments_wechatpay/debug</config_path>
             </field>
+            <field id="sort_order" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Sort Order</label>
+                <config_path>payment/nihaopay_payments_unionpay/sort_order</config_path>
+            </field>
         </group>
 
       <group id="nihaopay_payments_unionpay" translate="label" sortOrder="400" type="text" showInDefault="1" showInWebsite="1">
@@ -72,6 +80,10 @@
                 <label>Enable Debug</label>
                 <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 <config_path>payment/nihaopay_payments_unionpay/debug</config_path>
+            </field>
+            <field id="sort_order" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Sort Order</label>
+                <config_path>payment/nihaopay_payments_unionpay/sort_order</config_path>
             </field>
         </group>
       
