@@ -70,26 +70,18 @@ class Ipn extends Apm
             ->setIsTransactionClosed(1)
             ->registerCaptureNotification($amount);
 
-
         $this->_debug('Order save');
     
         $order->save();
 
-        //notify customer
-        $invoice = $payment->getCreatedInvoice();
-        if($invoice){
-            $this->_debug('Invoice is not null');
-        }
         if(!$order->getEmailSent()){
-            $this->_debug('email not sent');
+            $this->orderSender->send($order);
+            $order->addStatusHistoryComment(
+                    __('Send orderConfirmation email to customer #', $order->getStoreId())
+                )
+                ->setIsCustomerNotified(true);
         }
-
-        if ($invoice && !$order->getEmailSent()) {
-            $this->invoiceSender->send($invoice);
-            $message = 'Notified customer about invoice #'. $invoice->getIncrementId();
-            $order->addStatusToHistory($orderStatus, $message, true)->save();
-            $this->_debug('send email');
-        }   
+        
     }
     
     protected function failIPN($order,$data){
