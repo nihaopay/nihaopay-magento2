@@ -57,25 +57,38 @@ class Ipn extends Apm
     }
     
     protected function successIPN($order,$data){
+
+        $this->_debug('Into successIPN');
     
         $payment = $order->getPayment();
         $amount = ((int)$data['amount'])/100;
         $amount = number_format((float)$amount, 2, '.', '');
+
         $payment->setTransactionId($data['id'])
             ->setCurrencyCode($order->getOrderCurrencyCode())
             ->setPreparedMessage('')
             ->setIsTransactionClosed(1)
             ->registerCaptureNotification($amount);
+
+
+        $this->_debug('Order save');
+    
         $order->save();
 
-        // // notify customer
+        //notify customer
         $invoice = $payment->getCreatedInvoice();
+        if($invoice){
+            $this->_debug('Invoice is not null');
+        }
+        if(!$order->getEmailSent()){
+            $this->_debug('email not sent');
+        }
+
         if ($invoice && !$order->getEmailSent()) {
-            $order->queueNewOrderEmail()->addStatusHistoryComment(
-                $this->__('Notified customer about invoice #%s.', $invoice->getIncrementId())
-            )
-            ->setIsCustomerNotified(true)
-            ->save();
+            $this->invoiceSender->send($invoice);
+            $message = 'Notified customer about invoice #'. $invoice->getIncrementId();
+            $order->addStatusToHistory($orderStatus, $message, true)->save();
+            $this->_debug('send email');
         }   
     }
     
@@ -154,7 +167,7 @@ class Ipn extends Apm
         }
         else {
             // Unknown status
-            $order->addStatusHistoryComment('Unknown Worldpay Payment Status: ' . $status . ' for ' . $orderCode)
+            $order->addStatusHistoryComment('Unknown Payment Status: ' . $status . ' for ' . $orderCode)
            ->setIsCustomerNotified(true);
         }
         $order->save();

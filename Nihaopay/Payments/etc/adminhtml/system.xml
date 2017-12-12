@@ -41,7 +41,7 @@
             </field>
             <field id="sort_order" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Sort Order</label>
-                <config_path>payment/nihaopay_payments_unionpay/sort_order</config_path>
+                <frontend_class>validate-number</frontend_class>
             </field>
         </group>
 
@@ -62,7 +62,7 @@
             </field>
             <field id="sort_order" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Sort Order</label>
-                <config_path>payment/nihaopay_payments_unionpay/sort_order</config_path>
+                <frontend_class>validate-number</frontend_class>
             </field>
         </group>
 
@@ -83,7 +83,7 @@
             </field>
             <field id="sort_order" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Sort Order</label>
-                <config_path>payment/nihaopay_payments_unionpay/sort_order</config_path>
+                <frontend_class>validate-number</frontend_class>
             </field>
         </group>
       

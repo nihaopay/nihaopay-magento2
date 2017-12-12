@@ -54,17 +54,6 @@ class Redirect extends Apm
 
         $this->getResponse()->appendBody($myform);
 
-        // /** @var \Magento\Framework\Controller\Result\Raw $response */
-        // $response = $this->resultFactory->create(ResultFactory::TYPE_RAW);
-        // $response->setHeader('Content-type', 'text/plain');
-
-        // $data1 = 'This is test';
-        
-        // $response->setContents(
-        //      $myform
-        // );
-        // return $response;
-
     }
 
 
