@@ -14,7 +14,6 @@ class Ipn extends Apm
         
         $this->_debug("enter ipn");
         $data = $this->getRequest()->getParams();
-
         $this->processPayment($data);
         $this->_redirect('checkout/onepage/success');
         $this->_debug("leave ipn");
@@ -25,7 +24,6 @@ class Ipn extends Apm
     protected function processPayment($data){
         $this->_debug('reference : ' . $data['reference']);
         if(!isset($data['reference']) || !isset($data['status'])){
-
             $this->_debug("503 Service Unavailable");
             return;
         }
@@ -70,18 +68,14 @@ class Ipn extends Apm
             ->setIsTransactionClosed(1)
             ->registerCaptureNotification($amount);
 
-        $this->_debug('Order save');
-    
-        $order->save();
-
-        if(!$order->getEmailSent()){
-            $this->orderSender->send($order);
-            $order->addStatusHistoryComment(
-                    __('Send orderConfirmation email to customer #', $order->getStoreId())
+        $this->orderSender->send($order);
+        $order->addStatusHistoryComment(
+                    __('Send orderConfirmation email to customer #%1.', $order->getStoreId())
                 )
                 ->setIsCustomerNotified(true);
-        }
-        
+
+        $this->_debug('Order save');
+        $order->save();
     }
     
     protected function failIPN($order,$data){
@@ -93,7 +87,6 @@ class Ipn extends Apm
         if (!$order->isCanceled()) {
             // $payment->registerPaymentReviewAction(Mage_Sales_Model_Order_Payment::REVIEW_ACTION_DENY, false);
         } else {
-            
             $comment = $this->__('Transaction ID: "%s"', $data['id']);
             $order->addStatusHistoryComment($comment, false);
         }

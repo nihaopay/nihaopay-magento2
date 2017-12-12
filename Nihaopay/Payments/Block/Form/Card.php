@@ -9,7 +9,6 @@ class Card extends \Magento\Payment\Block\Form
      * @var string
      */
     protected $_template = 'Nihaopay_Payments::form/card.phtml';
-    private $worldpayPaymentsCard;
     
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -19,7 +18,6 @@ class Card extends \Magento\Payment\Block\Form
     ) {
         parent::__construct($context, $data);
         $this->config = $config;
-        $this->worldpayPaymentsCard = $paymentHelper->getMethodInstance('worldpay_payments_card');
     }
 
     public function getClientKey()
@@ -27,13 +25,4 @@ class Card extends \Magento\Payment\Block\Form
         return $this->config->getClientKey();
     }
 
-    public function saveCardEnabled()
-    {
-        return $this->config->saveCard();
-    }
-
-    public function getSavedCards()
-    {
-        return $this->worldpayPaymentsCard->getSavedCards();
-    }
 }

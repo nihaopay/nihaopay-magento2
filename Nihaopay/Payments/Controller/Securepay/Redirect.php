@@ -58,7 +58,6 @@ class Redirect extends Apm
 
 
     function getReferenceCode($order_id){
-
         $tmstemp = time();
         return $order_id . 'at' . $tmstemp;
     }
