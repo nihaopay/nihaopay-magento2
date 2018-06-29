@@ -154,8 +154,11 @@ class NihaopayPayments extends AbstractMethod
         $callback = $this->urlBuilder->getUrl('nihaopay/securepay/callback', ['_secure' => true]);
 
         $vendor = $this->myvendor();
-        
-        $params = array("amount"=>$amount*100
+        if ($orderDetails['currencyCode'] != 'JPY') {
+            $amount = $amount*100;
+        }
+ 
+        $params = array("amount"=>$amount
                 ,"vendor"=>$vendor
                 ,"currency"=>$orderDetails['currencyCode']
                 ,"reference"=> $reference
