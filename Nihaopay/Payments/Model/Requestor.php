@@ -5,14 +5,14 @@ namespace Nihaopay\Payments\Model;
 class Requestor
 {
 	private $debug = false;
-	
+
 	public function __construct(){
-	
+
 	}
 
 	public function request($token, $payment,$amount){
 		$order = $payment->getOrder();
-	
+
 		$httpClient = CurlClient::instance();
 		$url = "";
 		if($this->debug)
@@ -20,10 +20,16 @@ class Requestor
 		else
 			$url = "https://api.nihaopay.com/v1.2/transactions/expresspay";
 		$headers = array("Authorization: Bearer " . $token);
-		
+
+		$currencyKey = "amount";
+
+		if ($order->getOrderCurrencyCode() == "RMB") {
+			$currencyKey = "rmb_amount";
+		}
+
 		if($this->debug){
 			//test account
-			$params = array("amount"=>$order->getGrandTotal()*100
+			$params = array($currencyKey=>$order->getGrandTotal()*100
 					,"card_type"=>"unionpay"
 					,"currency"=>$order->getOrderCurrencyCode()
 					,"card_number"=>$payment->getCcNumber()
@@ -33,7 +39,7 @@ class Requestor
 					,"description"=>sprintf('#%s, %s', $order->getIncrementId(), $order->getCustomerEmail())
 					);
 		}else{
-			$params = array("amount"=>$order->getGrandTotal()*100
+			$params = array($currencyKey=>$order->getGrandTotal()*100
 					,"card_type"=>"unionpay"
 					,"currency"=>$order->getOrderCurrencyCode()
 					,"card_number"=>$payment->getCcNumber()
@@ -45,13 +51,13 @@ class Requestor
 		}
 		list($rbody, $rcode, $rheaders) = $httpClient->request("post",$url,$headers,$params,false);
 		$resp = $this->_interpretResponse($rbody, $rcode, $rheaders,$params);
-		
+
 		return $resp;
-		
+
 	}
-	
+
 	public function refund($token,$payment,$amount){
-	
+
 	    $transactionId = $payment->getParentTransactionId();
 		$order = $payment->getOrder();
 
@@ -63,17 +69,23 @@ class Requestor
 			$url = "https://api.nihaopay.com/v1.2/transactions/" . $transactionId . "/refund";
 		$headers = array("Authorization: Bearer " . $token);
 
-		$params = array("amount"=>$amount*100
+		$currencyKey = "amount";
+
+		if ($order->getOrderCurrencyCode() == "RMB") {
+			$currencyKey = "rmb_amount";
+		}
+
+		$params = array($currencyKey=>$amount*100
 				,"currency"=>$order->getOrderCurrencyCode()
 				,"reason"=>''
 				);
-					
+
 		list($rbody, $rcode, $rheaders) = $httpClient->request("post",$url,$headers,$params,false);
 		$resp = $this->_interpretResponse($rbody, $rcode, $rheaders,$params);
-		
+
 		return $resp;
-					
-					
+
+
 	}
 	private function _interpretResponse($rbody, $rcode, $rheaders,$params)
     {
@@ -107,7 +119,7 @@ class Requestor
         throw new \Exception($msg);
 
     }
-    
+
     public function setDebug($debug){
     	$this->debug = $debug;
     }
@@ -117,10 +129,10 @@ class Requestor
 	protected function log($msg)
     {
         // Mage::log("Requestor - ".$msg);
-    }    
-    
+    }
+
     public function getSecureForm($token, $params){
-    
+
 		$httpClient = CurlClient::instance();
 		$url = "";
 		if($this->debug)
@@ -128,15 +140,15 @@ class Requestor
 		else
 			$url = "https://api.nihaopay.com/v1.2/transactions/securepay";
 		$headers = array("Authorization: Bearer " . $token);
-		
+
 		$this->log('send params to '.$url .' with head' . print_r($headers,true));
 		$this->log('params:'. print_r($params,true));
-		
+
 		list($rbody, $rcode, $rheaders) = $httpClient->request("post",$url,$headers,$params,false);
 		$this->log($rbody);
 
 		$resp = $this->_interpretResponse($rbody, $rcode, $rheaders,$params);
-		
+
 		return $rbody;
     }
 
@@ -145,6 +157,6 @@ class Requestor
     	$tmstemp = time();
         return $order_id . 'at' . $tmstemp;
     }
-	
-    
+
+
 }
