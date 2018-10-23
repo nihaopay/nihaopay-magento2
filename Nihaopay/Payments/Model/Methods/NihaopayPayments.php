@@ -144,12 +144,12 @@ class NihaopayPayments extends AbstractMethod
         }else{
              $debug = true;
         }
-        
+
         $token = $this->config->getServiceKey();
-    
+
         // $sOrderId = Mage::getSingleton('checkout/session')->getLastRealOrderId();
         // $oOrder = Mage::getModel('sales/order')->loadByIncrementId($sOrderId);
-        
+
         $ipn = $this->urlBuilder->getUrl('nihaopay/securepay/ipn', ['_secure' => true]);
         $callback = $this->urlBuilder->getUrl('nihaopay/securepay/callback', ['_secure' => true]);
 
@@ -157,8 +157,15 @@ class NihaopayPayments extends AbstractMethod
         if ($orderDetails['currencyCode'] != 'JPY') {
             $amount = $amount*100;
         }
- 
-        $params = array("amount"=>$amount
+
+
+        $currencyKey = "amount";
+
+        if ($order->getOrderCurrencyCode() == "RMB") {
+          $currencyKey = "rmb_amount";
+        }
+
+        $params = array($currencyKey=>$amount
                 ,"vendor"=>$vendor
                 ,"currency"=>$orderDetails['currencyCode']
                 ,"reference"=> $reference
@@ -184,7 +191,7 @@ class NihaopayPayments extends AbstractMethod
             $this->_debug($e->getMessage());
             throw new \Exception('Payment failed, please try again later ' . $e->getMessage());
         }
-        
+
     }
 
     function ismobile() {
@@ -242,7 +249,7 @@ class NihaopayPayments extends AbstractMethod
     {
          $this->_debug("call refund");
         if ($order = $payment->getOrder()) {
-           
+
             try {
 
                 $debug = false;
@@ -251,7 +258,7 @@ class NihaopayPayments extends AbstractMethod
                 }else{
                      $debug = true;
                 }
-                
+
                 $token = $this->config->getServiceKey();
 
                 $requestor = new Requestor();
@@ -281,7 +288,7 @@ class NihaopayPayments extends AbstractMethod
         throw new LocalizedException(__('You cannot cancel an APM order'));
     }
 
-    
+
 
     private function getCheckoutMethod($quote)
     {
@@ -297,7 +304,7 @@ class NihaopayPayments extends AbstractMethod
         }
         return $quote->getCheckoutMethod();
     }
-    
+
     public function readyMagentoQuote() {
         $quote = $this->checkoutSession->getQuote();
 
@@ -356,7 +363,7 @@ class NihaopayPayments extends AbstractMethod
     }
 
     protected function _debug($debugData)
-    {   
+    {
         if ($this->config->debugMode($this->_code)) {
             $this->logger->debug($debugData);
         }
@@ -370,7 +377,7 @@ class NihaopayPayments extends AbstractMethod
 
         $data = [];
 
-       
+
 
         $data['currencyCode'] = $currencyCode;
         $data['name'] = $billing->getName();
@@ -400,7 +407,7 @@ class NihaopayPayments extends AbstractMethod
         ];
 
         $Product='';
- 
+
         foreach($items as $item) {
             $Product = $item->getName().'...';
             break;
