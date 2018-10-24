@@ -31,7 +31,7 @@ class Requestor
 			//test account
 			$params = array($currencyKey=>$order->getGrandTotal()*100
 					,"card_type"=>"unionpay"
-					,"currency"=>$order->getOrderCurrencyCode()
+					,"currency"=>($currencyKey == "rmb_amount" ? "USD" : $order->getOrderCurrencyCode())
 					,"card_number"=>$payment->getCcNumber()
 					,"card_exp_month"=>sprintf('%02d',$payment->getCcExpMonth())
 					,"card_exp_year"=>$payment->getCcExpYear()
@@ -41,7 +41,7 @@ class Requestor
 		}else{
 			$params = array($currencyKey=>$order->getGrandTotal()*100
 					,"card_type"=>"unionpay"
-					,"currency"=>$order->getOrderCurrencyCode()
+					,"currency"=>($currencyKey == "rmb_amount" ? "USD" : $order->getOrderCurrencyCode())
 					,"card_number"=>$payment->getCcNumber()
 					,"card_exp_month"=>sprintf('%02d',$payment->getCcExpMonth())
 					,"card_exp_year"=>$payment->getCcExpYear()
