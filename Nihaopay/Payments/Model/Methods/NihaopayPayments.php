@@ -9,6 +9,7 @@ use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Nihaopay\Payments\Model\Requestor;
+use Nihaopay\Payments\Model\Source\SettlementCurrency;
 
 class NihaopayPayments extends AbstractMethod
 {
@@ -64,7 +65,8 @@ class NihaopayPayments extends AbstractMethod
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
-    ) {
+    )
+    {
         parent::__construct(
             $context,
             $registry,
@@ -102,11 +104,13 @@ class NihaopayPayments extends AbstractMethod
         $stateObject->setIsNotified(false);
     }
 
-    public function getOrderPlaceRedirectUrl() {
+    public function getOrderPlaceRedirectUrl()
+    {
         return $this->urlBuilder->getUrl('nihaopay/securepay/redirect', ['_secure' => true]);
     }
 
-    public function getAjaxCheckStatus() {
+    public function getAjaxCheckStatus()
+    {
         return $this->urlBuilder->getUrl('nihaopay/securepay/checkstatus', ['_secure' => true]);
     }
 
@@ -125,7 +129,8 @@ class NihaopayPayments extends AbstractMethod
         return $this;
     }
 
-    public function createApmOrder($quote, $reference) {
+    public function createApmOrder($quote, $reference)
+    {
 
 
         $orderId = $quote->getReservedOrderId();
@@ -138,52 +143,50 @@ class NihaopayPayments extends AbstractMethod
 
         try {
 
-        $debug = false;
-        if ($this->config->isLiveMode()) {
             $debug = false;
-        }else{
-             $debug = true;
-        }
 
-        $token = $this->config->getServiceKey();
+            if ($this->config->isLiveMode()) {
+                $debug = false;
+            } else {
+                $debug = true;
+            }
 
-        // $sOrderId = Mage::getSingleton('checkout/session')->getLastRealOrderId();
-        // $oOrder = Mage::getModel('sales/order')->loadByIncrementId($sOrderId);
+            $token = $this->config->getServiceKey();
 
-        $ipn = $this->urlBuilder->getUrl('nihaopay/securepay/ipn', ['_secure' => true]);
-        $callback = $this->urlBuilder->getUrl('nihaopay/securepay/callback', ['_secure' => true]);
+            $ipn = $this->urlBuilder->getUrl('nihaopay/securepay/ipn', ['_secure' => true]);
+            $callback = $this->urlBuilder->getUrl('nihaopay/securepay/callback', ['_secure' => true]);
 
-        $vendor = $this->myvendor();
-        if ($orderDetails['currencyCode'] != 'JPY') {
-            $amount = $amount*100;
-        }
+            $vendor = $this->myvendor();
+            if ($orderDetails['currencyCode'] != SettlementCurrency::JPY_CURRENCY_VALUE) {
+                $amount = $amount * 100;
+            }
 
+            $currencyKey = "amount";
+            $currencyCode = $orderDetails['currencyCode'];
 
-        $currencyKey = "amount";
+            if ($this->config->getUseRmbAmount() == 1 && $orderDetails['currencyCode'] == SettlementCurrency::RMB_CURRENCY_VALUE) {
+                $currencyKey = "rmb_amount";
+                $currencyCode = $this->config->getSettlementCurrency();
+            }
 
-        if ($order->getOrderCurrencyCode() == "RMB") {
-          $currencyKey = "rmb_amount";
-        }
+            $params = array($currencyKey => $amount
+            , "vendor" => $vendor
+            , "currency" => $currencyCode
+            , "reference" => $reference
+            , "ipn_url" => $ipn
+            , "callback_url" => $callback
+            , "terminal" => $this->ismobile() ? 'WAP' : 'ONLINE'
+            , "description" => $orderDetails['orderDescription']
+            , "note" => sprintf('#%s(%s)', $orderId, $orderDetails['shopperEmailAddress'])
+            );
 
-        $params = array($currencyKey=>$amount
-                ,"vendor"=>$vendor
-                ,"currency"=>$orderDetails['currencyCode']
-                ,"reference"=> $reference
-                ,"ipn_url"=>$ipn
-                ,"callback_url"=>$callback
-                ,"terminal" => $this->ismobile()?'WAP':'ONLINE'
-                ,"description"=>$orderDetails['orderDescription']
-                ,"note"=>sprintf('#%s(%s)', $orderId, $orderDetails['shopperEmailAddress'])
-                );
+            $this->_debug($vendor);
+            $requestor = new Requestor();
+            $requestor->setDebug($debug);
+            $ret = $requestor->getSecureForm($token, $params);
 
-        $this->_debug($vendor);
-        $requestor = new Requestor();
-        $requestor->setDebug($debug);
-        $ret = $requestor->getSecureForm($token, $params);
-
-        return $ret;
-        }
-        catch (\Exception $e) {
+            return $ret;
+        } catch (\Exception $e) {
 
             $payment->setStatus(self::STATUS_ERROR);
             $payment->setAmount($amount);
@@ -194,39 +197,41 @@ class NihaopayPayments extends AbstractMethod
 
     }
 
-    function ismobile() {
+    function ismobile()
+    {
         $is_mobile = '0';
 
-        if(preg_match('/(android|up.browser|up.link|mmp|symbian|smartphone|midp|wap|phone)/i', strtolower($_SERVER['HTTP_USER_AGENT']))) {
-            $is_mobile=1;
+        if (preg_match('/(android|up.browser|up.link|mmp|symbian|smartphone|midp|wap|phone)/i', strtolower($_SERVER['HTTP_USER_AGENT']))) {
+            $is_mobile = 1;
         }
 
-        if((strpos(strtolower($_SERVER['HTTP_ACCEPT']),'application/vnd.wap.xhtml+xml')>0) or ((isset($_SERVER['HTTP_X_WAP_PROFILE']) or isset($_SERVER['HTTP_PROFILE'])))) {
-            $is_mobile=1;
+        if ((strpos(strtolower($_SERVER['HTTP_ACCEPT']), 'application/vnd.wap.xhtml+xml') > 0) or ((isset($_SERVER['HTTP_X_WAP_PROFILE']) or isset($_SERVER['HTTP_PROFILE'])))) {
+            $is_mobile = 1;
         }
 
-        $mobile_ua = strtolower(substr($_SERVER['HTTP_USER_AGENT'],0,4));
-        $mobile_agents = array('w3c ','acs-','alav','alca','amoi','andr','audi','avan','benq','bird','blac','blaz','brew','cell','cldc','cmd-','dang','doco','eric','hipt','inno','ipaq','java','jigs','kddi','keji','leno','lg-c','lg-d','lg-g','lge-','maui','maxo','midp','mits','mmef','mobi','mot-','moto','mwbp','nec-','newt','noki','oper','palm','pana','pant','phil','play','port','prox','qwap','sage','sams','sany','sch-','sec-','send','seri','sgh-','shar','sie-','siem','smal','smar','sony','sph-','symb','t-mo','teli','tim-','tosh','tsm-','upg1','upsi','vk-v','voda','wap-','wapa','wapi','wapp','wapr','webc','winw','winw','xda','xda-');
+        $mobile_ua = strtolower(substr($_SERVER['HTTP_USER_AGENT'], 0, 4));
+        $mobile_agents = array('w3c ', 'acs-', 'alav', 'alca', 'amoi', 'andr', 'audi', 'avan', 'benq', 'bird', 'blac', 'blaz', 'brew', 'cell', 'cldc', 'cmd-', 'dang', 'doco', 'eric', 'hipt', 'inno', 'ipaq', 'java', 'jigs', 'kddi', 'keji', 'leno', 'lg-c', 'lg-d', 'lg-g', 'lge-', 'maui', 'maxo', 'midp', 'mits', 'mmef', 'mobi', 'mot-', 'moto', 'mwbp', 'nec-', 'newt', 'noki', 'oper', 'palm', 'pana', 'pant', 'phil', 'play', 'port', 'prox', 'qwap', 'sage', 'sams', 'sany', 'sch-', 'sec-', 'send', 'seri', 'sgh-', 'shar', 'sie-', 'siem', 'smal', 'smar', 'sony', 'sph-', 'symb', 't-mo', 'teli', 'tim-', 'tosh', 'tsm-', 'upg1', 'upsi', 'vk-v', 'voda', 'wap-', 'wapa', 'wapi', 'wapp', 'wapr', 'webc', 'winw', 'winw', 'xda', 'xda-');
 
-        if(in_array($mobile_ua,$mobile_agents)) {
-            $is_mobile=1;
+        if (in_array($mobile_ua, $mobile_agents)) {
+            $is_mobile = 1;
         }
 
         if (isset($_SERVER['ALL_HTTP'])) {
-            if (strpos(strtolower($_SERVER['ALL_HTTP']),'OperaMini')>0) {
-                $is_mobile=1;
+            if (strpos(strtolower($_SERVER['ALL_HTTP']), 'OperaMini') > 0) {
+                $is_mobile = 1;
             }
         }
 
-        if (strpos(strtolower($_SERVER['HTTP_USER_AGENT']),'windows')>0) {
-            $is_mobile=0;
+        if (strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'windows') > 0) {
+            $is_mobile = 0;
         }
 
         return $is_mobile;
     }
 
 
-    protected function myvendor(){
+    protected function myvendor()
+    {
         return "";
     }
 
@@ -237,7 +242,7 @@ class NihaopayPayments extends AbstractMethod
 
     public function capture(InfoInterface $payment, $amount)
     {
-       return $this;
+        return $this;
     }
 
     public function authorize(InfoInterface $payment, $amount)
@@ -247,7 +252,7 @@ class NihaopayPayments extends AbstractMethod
 
     public function refund(InfoInterface $payment, $amount)
     {
-         $this->_debug("call refund");
+        $this->_debug("call refund");
         if ($order = $payment->getOrder()) {
 
             try {
@@ -255,21 +260,20 @@ class NihaopayPayments extends AbstractMethod
                 $debug = false;
                 if ($this->config->isLiveMode()) {
                     $debug = false;
-                }else{
-                     $debug = true;
+                } else {
+                    $debug = true;
                 }
 
                 $token = $this->config->getServiceKey();
 
                 $requestor = new Requestor();
                 $requestor->setDebug($debug);
-                $ret = $requestor->refund($token,$payment,$amount);
+                $ret = $requestor->refund($token, $payment, $amount);
 
                 $this->_debug("leave call refund");
 
                 return $this;
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 $this->_debug("call refund fail");
                 $a = $e->getMessage();
                 throw new LocalizedException(__('Refund failed ' . $e->getMessage()));
@@ -284,10 +288,9 @@ class NihaopayPayments extends AbstractMethod
 
     public function cancel(InfoInterface $payment)
     {
-         $this->_debug("call cancel action");
+        $this->_debug("call cancel action");
         throw new LocalizedException(__('You cannot cancel an APM order'));
     }
-
 
 
     private function getCheckoutMethod($quote)
@@ -305,16 +308,17 @@ class NihaopayPayments extends AbstractMethod
         return $quote->getCheckoutMethod();
     }
 
-    public function readyMagentoQuote() {
+    public function readyMagentoQuote()
+    {
         $quote = $this->checkoutSession->getQuote();
 
         $quote->reserveOrderId();
         $this->quoteRepository->save($quote);
         if ($this->getCheckoutMethod($quote) == \Magento\Checkout\Model\Type\Onepage::METHOD_GUEST) {
             $quote->setCustomerId(null)
-            ->setCustomerEmail($quote->getBillingAddress()->getEmail())
-            ->setCustomerIsGuest(true)
-            ->setCustomerGroupId(\Magento\Customer\Model\Group::NOT_LOGGED_IN_ID);
+                ->setCustomerEmail($quote->getBillingAddress()->getEmail())
+                ->setCustomerIsGuest(true)
+                ->setCustomerGroupId(\Magento\Customer\Model\Group::NOT_LOGGED_IN_ID);
         }
 
         $quote->getBillingAddress()->setShouldIgnoreValidation(true);
@@ -331,12 +335,12 @@ class NihaopayPayments extends AbstractMethod
         return $quote;
     }
 
-    public function createMagentoOrder($quote) {
+    public function createMagentoOrder($quote)
+    {
         try {
             $order = $this->quoteManagement->submit($quote);
             return $order;
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $orderId = $quote->getReservedOrderId();
             $payment = $quote->getPayment();
             $token = $payment->getAdditionalInformation('payment_token');
@@ -346,20 +350,21 @@ class NihaopayPayments extends AbstractMethod
             $payment->setLastTransId($orderId);
             $this->_debug($e->getMessage());
 
-            \Magento\Checkout\Model\Session::restoreQuote();
+            $this->checkoutSession->restoreQuote();
 
             throw new \Exception($e->getMessage());
         }
     }
 
-    public function sendMagentoOrder($order) {
+    public function sendMagentoOrder($order)
+    {
         $this->checkoutSession->start();
 
         $this->checkoutSession->clearHelperData();
 
         $this->checkoutSession->setLastOrderId($order->getId())
-                ->setLastRealOrderId($order->getIncrementId())
-                ->setLastOrderStatus($order->getStatus());
+            ->setLastRealOrderId($order->getIncrementId())
+            ->setLastOrderStatus($order->getStatus());
     }
 
     protected function _debug($debugData)
@@ -369,7 +374,8 @@ class NihaopayPayments extends AbstractMethod
         }
     }
 
-    protected function getSharedOrderDetails($quote, $currencyCode) {
+    protected function getSharedOrderDetails($quote, $currencyCode)
+    {
 
         $billing = $quote->getBillingAddress();
         $shipping = $quote->getShippingAddress();
@@ -378,38 +384,37 @@ class NihaopayPayments extends AbstractMethod
         $data = [];
 
 
-
         $data['currencyCode'] = $currencyCode;
         $data['name'] = $billing->getName();
 
         $data['billingAddress'] = [
-            "address1"=>$billing->getStreetLine(1),
-            "address2"=>$billing->getStreetLine(2),
-            "address3"=>$billing->getStreetLine(3),
-            "postalCode"=>$billing->getPostcode(),
-            "city"=>$billing->getCity(),
-            "state"=>"",
-            "countryCode"=>$billing->getCountryId(),
-            "telephoneNumber"=>$billing->getTelephone()
+            "address1" => $billing->getStreetLine(1),
+            "address2" => $billing->getStreetLine(2),
+            "address3" => $billing->getStreetLine(3),
+            "postalCode" => $billing->getPostcode(),
+            "city" => $billing->getCity(),
+            "state" => "",
+            "countryCode" => $billing->getCountryId(),
+            "telephoneNumber" => $billing->getTelephone()
         ];
 
         $data['deliveryAddress'] = [
-            "firstName"=>$shipping->getFirstname(),
-            "lastName"=>$shipping->getLastname(),
-            "address1"=>$shipping->getStreetLine(1),
-            "address2"=>$shipping->getStreetLine(2),
-            "address3"=>$shipping->getStreetLine(3),
-            "postalCode"=>$shipping->getPostcode(),
-            "city"=>$shipping->getCity(),
-            "state"=>"",
-            "countryCode"=>$shipping->getCountryId(),
-            "telephoneNumber"=>$shipping->getTelephone()
+            "firstName" => $shipping->getFirstname(),
+            "lastName" => $shipping->getLastname(),
+            "address1" => $shipping->getStreetLine(1),
+            "address2" => $shipping->getStreetLine(2),
+            "address3" => $shipping->getStreetLine(3),
+            "postalCode" => $shipping->getPostcode(),
+            "city" => $shipping->getCity(),
+            "state" => "",
+            "countryCode" => $shipping->getCountryId(),
+            "telephoneNumber" => $shipping->getTelephone()
         ];
 
-        $Product='';
+        $Product = '';
 
-        foreach($items as $item) {
-            $Product = $item->getName().'...';
+        foreach ($items as $item) {
+            $Product = $item->getName() . '...';
             break;
         }
         $data['orderDescription'] = $Product;
@@ -429,9 +434,9 @@ class NihaopayPayments extends AbstractMethod
         $siteCodes = $this->config->getSitecodes();
         if ($siteCodes) {
             foreach ($siteCodes as $siteCode) {
-                    $data['siteCode'] = $siteCode['site_code'];
-                    $data['settlementCurrency'] = $siteCode['settlement_currency'];
-                    break;
+                $data['siteCode'] = $siteCode['site_code'];
+                $data['settlementCurrency'] = $siteCode['settlement_currency'];
+                break;
             }
         }
         if (!isset($data['settlementCurrency'])) {

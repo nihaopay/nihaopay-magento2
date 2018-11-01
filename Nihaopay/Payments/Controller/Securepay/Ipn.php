@@ -5,6 +5,7 @@ namespace Nihaopay\Payments\Controller\Securepay;
 use Magento\Checkout\Model\Session;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
+use Nihaopay\Payments\Model\Source\SettlementCurrency;
 
 
 class Ipn extends Apm
@@ -29,7 +30,9 @@ class Ipn extends Apm
         }
 
         $order_id = '';
+
         $refs = explode('at',$data['reference']);
+
         //first item is order id
         if($refs !=null && is_array($refs)){
             $order_id = $refs[0];
@@ -37,6 +40,7 @@ class Ipn extends Apm
             $this->_debug('reference code invalid:' . $data['reference']);
             return;
         }
+
         $this->_debug('order id : ' . $order_id);
         $order = $this->orderFactory->create()->loadByIncrementId($order_id);
 
@@ -59,8 +63,10 @@ class Ipn extends Apm
         $this->_debug('Into successIPN');
 
         $currencyKey = "amount";
+        $currencyCode = $order->getOrderCurrencyCode();
 
-        if ($order->getOrderCurrencyCode() == "RMB") {
+
+        if ($this->config->getUseRmbAmount() == 1 && $order->getOrderCurrencyCode() == SettlementCurrency::RMB_CURRENCY_VALUE) {
           $currencyKey = "rmb_amount";
         }
 
@@ -69,7 +75,7 @@ class Ipn extends Apm
         $amount = number_format((float)$amount, 2, '.', '');
 
         $payment->setTransactionId($data['id'])
-            ->setCurrencyCode($order->getOrderCurrencyCode())
+            ->setCurrencyCode($currencyCode)
             ->setPreparedMessage('')
             ->setIsTransactionClosed(1)
             ->registerCaptureNotification($amount);

@@ -1,6 +1,7 @@
 <?php
 namespace Nihaopay\Payments\Model;
 
+use Nihaopay\Payments\Model\Source\SettlementCurrency;
 
 class Requestor
 {
@@ -22,16 +23,18 @@ class Requestor
 		$headers = array("Authorization: Bearer " . $token);
 
 		$currencyKey = "amount";
+		$currencyCode = $order->getOrderCurrencyCode();
 
-		if ($order->getOrderCurrencyCode() == "RMB") {
+		if ($this->config->getUseRmbAmount() == 1 && $order->getOrderCurrencyCode() == SettlementCurrency::RMB_CURRENCY_VALUE) {
 			$currencyKey = "rmb_amount";
+			$currencyCode = $this->config->getSettlementCurrency();
 		}
 
 		if($this->debug){
 			//test account
 			$params = array($currencyKey=>$order->getGrandTotal()*100
 					,"card_type"=>"unionpay"
-					,"currency"=>($currencyKey == "rmb_amount" ? "USD" : $order->getOrderCurrencyCode())
+					,"currency"=>$currencyCode
 					,"card_number"=>$payment->getCcNumber()
 					,"card_exp_month"=>sprintf('%02d',$payment->getCcExpMonth())
 					,"card_exp_year"=>$payment->getCcExpYear()
@@ -41,7 +44,7 @@ class Requestor
 		}else{
 			$params = array($currencyKey=>$order->getGrandTotal()*100
 					,"card_type"=>"unionpay"
-					,"currency"=>($currencyKey == "rmb_amount" ? "USD" : $order->getOrderCurrencyCode())
+					,"currency"=> $currencyCode
 					,"card_number"=>$payment->getCcNumber()
 					,"card_exp_month"=>sprintf('%02d',$payment->getCcExpMonth())
 					,"card_exp_year"=>$payment->getCcExpYear()
@@ -49,6 +52,7 @@ class Requestor
 					,"description"=>sprintf('#%s, %s', $order->getIncrementId(), $order->getCustomerEmail())
 					);
 		}
+
 		list($rbody, $rcode, $rheaders) = $httpClient->request("post",$url,$headers,$params,false);
 		$resp = $this->_interpretResponse($rbody, $rcode, $rheaders,$params);
 
@@ -70,13 +74,15 @@ class Requestor
 		$headers = array("Authorization: Bearer " . $token);
 
 		$currencyKey = "amount";
+		$currencyCode = $order->getOrderCurrencyCode();
 
-		if ($order->getOrderCurrencyCode() == "RMB") {
+		if ($order->getOrderCurrencyCode() == SettlementCurrency::RMB_CURRENCY_VALUE) {
 			$currencyKey = "rmb_amount";
+			$currencyCode = $this->config->getSettlementCurrency();
 		}
 
 		$params = array($currencyKey=>$amount*100
-				,"currency"=>$order->getOrderCurrencyCode()
+				,"currency"=>$currencyCode
 				,"reason"=>''
 				);
 
