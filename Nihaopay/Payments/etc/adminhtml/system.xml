@@ -14,15 +14,31 @@
                 <label>Test Service Key</label>
                 <config_path>payment/nihaopay_payments_card/test_service_key</config_path>
             </field>
-          
+
             <field id="live_service_key" translate="label" sortOrder="9" type="text" showInDefault="1" showInStore="1">
                 <label>Live Service Key</label>
                 <config_path>payment/nihaopay_payments_card/live_service_key</config_path>
             </field>
-           
+
+            <field id="use_rmb_amount" translate="label comment" sortOrder="10" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Use RMB Amount</label>
+                <comment>Send transactions in RMB Amount, receive IPN in RMB Amount.  (Must also select settlement currency below)</comment>
+                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                <config_path>payment/nihaopay_payments_card/use_rmb_amount</config_path>
+            </field>
+
+            <field id="settlement_currency" translate="label comment" sortOrder="11" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Settlement Currency</label>
+                <comment>This applies specifically to using the rmb_amount value, please select your settlement currency appropriately.</comment>
+                <source_model>Nihaopay\Payments\Model\Source\SettlementCurrency</source_model>
+                <config_path>payment/nihaopay_payments_card/settlement_currency</config_path>
+                <depends>
+                    <field id="use_rmb_amount">1</field>
+                </depends>
+            </field>
+
         </group>
 
-        
 
         <group id="nihaopay_payments_alipay" translate="label" sortOrder="400" type="text" showInDefault="1" showInWebsite="1">
             <label>AliPay</label>
@@ -86,7 +102,7 @@
                 <frontend_class>validate-number</frontend_class>
             </field>
         </group>
-      
+
 
     </section>
 </system>

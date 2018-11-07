@@ -5,13 +5,14 @@ namespace Nihaopay\Payments\Controller\Securepay;
 use Magento\Checkout\Model\Session;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
+use Nihaopay\Payments\Model\Source\SettlementCurrency;
 
 
 class Ipn extends Apm
 {
     public function execute()
     {
-        
+
         $this->_debug("enter ipn");
         $data = $this->getRequest()->getParams();
         $this->processPayment($data);
@@ -29,14 +30,17 @@ class Ipn extends Apm
         }
 
         $order_id = '';
+
         $refs = explode('at',$data['reference']);
+
         //first item is order id
         if($refs !=null && is_array($refs)){
-            $order_id = $refs[0];       
+            $order_id = $refs[0];
         }else{
             $this->_debug('reference code invalid:' . $data['reference']);
             return;
         }
+
         $this->_debug('order id : ' . $order_id);
         $order = $this->orderFactory->create()->loadByIncrementId($order_id);
 
@@ -47,23 +51,31 @@ class Ipn extends Apm
         $this->_debug('Find order id='.$order->getId());
         if($data['status']=='success'){
             $this->successIPN($order,$data);
-        
+
         }else{
             $this->failIPN($order,$data);
         }
-        
+
     }
-    
+
     protected function successIPN($order,$data){
 
         $this->_debug('Into successIPN');
-    
+
+        $currencyKey = "amount";
+        $currencyCode = $order->getOrderCurrencyCode();
+
+
+        if ($this->config->getUseRmbAmount() == 1 && $order->getOrderCurrencyCode() == SettlementCurrency::RMB_CURRENCY_VALUE) {
+          $currencyKey = "rmb_amount";
+        }
+
         $payment = $order->getPayment();
-        $amount = ((int)$data['amount'])/100;
+        $amount = ((int)$data[$currencyKey])/100;
         $amount = number_format((float)$amount, 2, '.', '');
 
         $payment->setTransactionId($data['id'])
-            ->setCurrencyCode($order->getOrderCurrencyCode())
+            ->setCurrencyCode($currencyCode)
             ->setPreparedMessage('')
             ->setIsTransactionClosed(1)
             ->registerCaptureNotification($amount);
@@ -77,7 +89,7 @@ class Ipn extends Apm
         $this->_debug('Order save');
         $order->save();
     }
-    
+
     protected function failIPN($order,$data){
         $payment = $order->getPayment();
 
@@ -92,7 +104,7 @@ class Ipn extends Apm
         }
 
         $order->save();
-    
+
     }
 
 
@@ -135,13 +147,13 @@ class Ipn extends Apm
                 $invoice = $order->prepareInvoice();
                 $invoice->setRequestedCaptureCase(\Magento\Sales\Model\Order\Invoice::CAPTURE_ONLINE);
                 $invoice->register();
-                
+
                 $transaction = $this->transactionFactory->create();
-                
+
                 $transaction->addObject($invoice)
                 ->addObject($invoice->getOrder())
                 ->save();
-                
+
                 $this->invoiceSender->send($invoice);
                 $order->addStatusHistoryComment(
                     __('Notified customer about invoice #%1.', $invoice->getId())
