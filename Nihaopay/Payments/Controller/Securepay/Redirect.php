@@ -18,9 +18,10 @@ class Redirect extends Apm
         $quote = $this->methods[$code]->readyMagentoQuote();
         $orderId = $quote->getReservedOrderId();
         $reference = $this->getReferenceCode($orderId);
+        $order = $this->orderFactory->create()->load($orderId);
 
         try {
-            $myform = $this->methods[$code]->createApmOrder($quote, $reference);
+            $myform = $this->methods[$code]->createApmOrder($quote,$order,$reference);
         }
         catch(\Exception $e) {
             return $result->setData([

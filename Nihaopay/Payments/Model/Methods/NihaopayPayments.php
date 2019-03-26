@@ -125,59 +125,48 @@ class NihaopayPayments extends AbstractMethod
         return $this;
     }
 
-    public function createApmOrder($quote, $reference) {
-
-
+    public function createApmOrder($quote, $order,$reference) {
         $orderId = $quote->getReservedOrderId();
         $payment = $quote->getPayment();
-        $amount = $quote->getGrandTotal();
-
-        $currency_code = $quote->getQuoteCurrencyCode();
-
-        $orderDetails = $this->getSharedOrderDetails($quote, $currency_code);
-
+        $amount = $order->getBaseGrandTotal();
         try {
-
-        $debug = false;
-        if ($this->config->isLiveMode()) {
             $debug = false;
-        }else{
-             $debug = true;
-        }
+            if ($this->config->isLiveMode()) {
+                $debug = false;
+            }else{
+                 $debug = true;
+            }
         
-        $token = $this->config->getServiceKey();
-    
-        // $sOrderId = Mage::getSingleton('checkout/session')->getLastRealOrderId();
-        // $oOrder = Mage::getModel('sales/order')->loadByIncrementId($sOrderId);
-        
-        $ipn = $this->urlBuilder->getUrl('nihaopay/securepay/ipn', ['_secure' => true]);
-        $callback = $this->urlBuilder->getUrl('nihaopay/securepay/callback', ['_secure' => true]);
+            $token = $this->config->getServiceKey();
+            
+            $ipn = $this->urlBuilder->getUrl('nihaopay/securepay/ipn', ['_secure' => true]);
+            $callback = $this->urlBuilder->getUrl('nihaopay/securepay/callback', ['_secure' => true]);
 
-        $vendor = $this->myvendor();
-        if ($orderDetails['currencyCode'] != 'JPY') {
-            $amount = $amount*100;
-        }
- 
-        $params = array("amount"=>$amount
-                ,"vendor"=>$vendor
-                ,"currency"=>$orderDetails['currencyCode']
-                ,"reference"=> $reference
-                ,"ipn_url"=>$ipn
-                ,"callback_url"=>$callback
-                ,"terminal" => $this->ismobile()?'WAP':'ONLINE'
-                ,"description"=>$orderDetails['orderDescription']
-                ,"note"=>sprintf('#%s(%s)', $orderId, $orderDetails['shopperEmailAddress'])
-                );
+            $vendor = $this->myvendor();
 
-        $this->_debug($vendor);
-        $requestor = new Requestor();
-        $requestor->setDebug($debug);
-        $ret = $requestor->getSecureForm($token, $params);
 
-        return $ret;
+            $currency_code = $order->getBaseCurrency();
+            $orderDetails = $this->getSharedOrderDetails($quote);
+            
+            $params = array("amount"=>$this->getAmount($amount,$currency_code)
+                    ,"vendor"=>$vendor
+                    ,"currency"=>$currency_code
+                    ,"reference"=> $reference
+                    ,"ipn_url"=>$ipn
+                    ,"callback_url"=>$callback
+                    ,"terminal" => $this->ismobile()?'WAP':'ONLINE'
+                    ,"description"=>$orderDetails['orderDescription']
+                    ,"note"=>sprintf('#%s(%s)', $orderId, $orderDetails['EmailAddress'])
+                    );
+
+            $this->_debug($vendor);
+            $requestor = new Requestor();
+            $requestor->setDebug($debug);
+            $ret = $requestor->getSecureForm($token, $params);
+
+            return $ret;
         }
         catch (\Exception $e) {
-
             $payment->setStatus(self::STATUS_ERROR);
             $payment->setAmount($amount);
             $payment->setLastTransId($orderId);
@@ -362,74 +351,34 @@ class NihaopayPayments extends AbstractMethod
         }
     }
 
-    protected function getSharedOrderDetails($quote, $currencyCode) {
-
-        $billing = $quote->getBillingAddress();
-        $shipping = $quote->getShippingAddress();
-        $items = $quote->getAllItems();
-
+    protected function getSharedOrderDetails($quote) {
         $data = [];
 
-       
-
-        $data['currencyCode'] = $currencyCode;
-        $data['name'] = $billing->getName();
-
-        $data['billingAddress'] = [
-            "address1"=>$billing->getStreetLine(1),
-            "address2"=>$billing->getStreetLine(2),
-            "address3"=>$billing->getStreetLine(3),
-            "postalCode"=>$billing->getPostcode(),
-            "city"=>$billing->getCity(),
-            "state"=>"",
-            "countryCode"=>$billing->getCountryId(),
-            "telephoneNumber"=>$billing->getTelephone()
-        ];
-
-        $data['deliveryAddress'] = [
-            "firstName"=>$shipping->getFirstname(),
-            "lastName"=>$shipping->getLastname(),
-            "address1"=>$shipping->getStreetLine(1),
-            "address2"=>$shipping->getStreetLine(2),
-            "address3"=>$shipping->getStreetLine(3),
-            "postalCode"=>$shipping->getPostcode(),
-            "city"=>$shipping->getCity(),
-            "state"=>"",
-            "countryCode"=>$shipping->getCountryId(),
-            "telephoneNumber"=>$shipping->getTelephone()
-        ];
-
         $Product='';
- 
+        $items = $quote->getAllItems();
         foreach($items as $item) {
             $Product = $item->getName().'...';
             break;
         }
         $data['orderDescription'] = $Product;
 
-        $data['shopperSessionId'] = $this->customerSession->getSessionId();
-        $data['shopperUserAgent'] = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
-        $data['shopperAcceptHeader'] = '*/*';
-
         if ($this->backendAuthSession->isLoggedIn()) {
             $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
             $customer = $objectManager->create('Magento\Customer\Model\Customer')->load($this->sessionQuote->getCustomerId());
-            $data['shopperEmailAddress'] = $customer->getEmail();
+            $data['EmailAddress'] = $customer->getEmail();
         } else {
-            $data['shopperEmailAddress'] = $this->customerSession->getCustomer()->getEmail();
-        }
-        $data['siteCode'] = null;
-        $siteCodes = $this->config->getSitecodes();
-        if ($siteCodes) {
-            foreach ($siteCodes as $siteCode) {
-                    $data['siteCode'] = $siteCode['site_code'];
-                    $data['settlementCurrency'] = $siteCode['settlement_currency'];
-                    break;
-            }
-        }
-        if (!isset($data['settlementCurrency'])) {
-            $data['settlementCurrency'] = $this->config->getSettlementCurrency();
+            $data['EmailAddress'] = $this->customerSession->getCustomer()->getEmail();
         }
         return $data;
+    }
+    protected function getAmount($amount, $currency = 'USD')
+    {
+        if ($currency == 'JPY') {
+            return (int)$amount;
+        }
+        else{
+            $amount = round($amount, 2) * 100;
+            return (int)$amount;
+        }
     }
 }
