@@ -126,55 +126,45 @@ class NihaopayPayments extends AbstractMethod
     }
 
     public function createApmOrder($quote, $reference) {
-
-
         $orderId = $quote->getReservedOrderId();
         $payment = $quote->getPayment();
-        $amount = $quote->getGrandTotal();
 
-        $currency_code = $quote->getQuoteCurrencyCode();
-
-        $orderDetails = $this->getSharedOrderDetails($quote, $currency_code);
+        $amount = $quote->getBaseGrandTotal();
+        $currency_code = $quote->getBaseCurrencyCode();
 
         try {
-
-        $debug = false;
-        if ($this->config->isLiveMode()) {
             $debug = false;
-        }else{
-             $debug = true;
-        }
-        
-        $token = $this->config->getServiceKey();
-    
-        // $sOrderId = Mage::getSingleton('checkout/session')->getLastRealOrderId();
-        // $oOrder = Mage::getModel('sales/order')->loadByIncrementId($sOrderId);
-        
-        $ipn = $this->urlBuilder->getUrl('nihaopay/securepay/ipn', ['_secure' => true]);
-        $callback = $this->urlBuilder->getUrl('nihaopay/securepay/callback', ['_secure' => true]);
+            if ($this->config->isLiveMode()) {
+                $debug = false;
+            }else{
+                 $debug = true;
+            }
+            
+            $orderDetails = $this->getSharedOrderDetails($quote);
+            $token = $this->config->getServiceKey();
+            
+            $ipn = $this->urlBuilder->getUrl('nihaopay/securepay/ipn', ['_secure' => true]);
+            $callback = $this->urlBuilder->getUrl('nihaopay/securepay/callback', ['_secure' => true]);
 
-        $vendor = $this->myvendor();
-        if ($orderDetails['currencyCode'] != 'JPY') {
-            $amount = $amount*100;
-        }
- 
-        $params = array("amount"=>$amount
-                ,"vendor"=>$vendor
-                ,"currency"=>$orderDetails['currencyCode']
-                ,"reference"=> $reference
-                ,"ipn_url"=>$ipn
-                ,"callback_url"=>$callback
-                ,"terminal" => $this->ismobile()?'WAP':'ONLINE'
-                ,"description"=>$orderDetails['orderDescription']
-                ,"note"=>sprintf('#%s(%s)', $orderId, $orderDetails['shopperEmailAddress'])
-                );
+            $vendor = $this->myvendor();
+     
+            $params = array("amount"=> $this->getAmount($amount,$currency_code)
+                    ,"vendor"=>$vendor
+                    ,"currency"=>$currency_code
+                    ,"reference"=> $reference
+                    ,"ipn_url"=>$ipn
+                    ,"callback_url"=>$callback
+                    ,"terminal" => $this->ismobile()?'WAP':'ONLINE'
+                    ,"description"=>$orderDetails['orderDescription']
+                    ,"note"=>sprintf('#%s(%s)', $orderId, $orderDetails['shopperEmailAddress'])
+                    );
 
-        $this->_debug($vendor);
-        $requestor = new Requestor();
-        $requestor->setDebug($debug);
-        $ret = $requestor->getSecureForm($token, $params);
+            $this->_debug($vendor);
+            $requestor = new Requestor();
+            $requestor->setDebug($debug);
+            $ret = $requestor->getSecureForm($token, $params);
 
-        return $ret;
+            return $ret;
         }
         catch (\Exception $e) {
 
@@ -362,43 +352,10 @@ class NihaopayPayments extends AbstractMethod
         }
     }
 
-    protected function getSharedOrderDetails($quote, $currencyCode) {
-
-        $billing = $quote->getBillingAddress();
-        $shipping = $quote->getShippingAddress();
+    protected function getSharedOrderDetails($quote) {
         $items = $quote->getAllItems();
 
         $data = [];
-
-       
-
-        $data['currencyCode'] = $currencyCode;
-        $data['name'] = $billing->getName();
-
-        $data['billingAddress'] = [
-            "address1"=>$billing->getStreetLine(1),
-            "address2"=>$billing->getStreetLine(2),
-            "address3"=>$billing->getStreetLine(3),
-            "postalCode"=>$billing->getPostcode(),
-            "city"=>$billing->getCity(),
-            "state"=>"",
-            "countryCode"=>$billing->getCountryId(),
-            "telephoneNumber"=>$billing->getTelephone()
-        ];
-
-        $data['deliveryAddress'] = [
-            "firstName"=>$shipping->getFirstname(),
-            "lastName"=>$shipping->getLastname(),
-            "address1"=>$shipping->getStreetLine(1),
-            "address2"=>$shipping->getStreetLine(2),
-            "address3"=>$shipping->getStreetLine(3),
-            "postalCode"=>$shipping->getPostcode(),
-            "city"=>$shipping->getCity(),
-            "state"=>"",
-            "countryCode"=>$shipping->getCountryId(),
-            "telephoneNumber"=>$shipping->getTelephone()
-        ];
-
         $Product='';
  
         foreach($items as $item) {
@@ -407,9 +364,6 @@ class NihaopayPayments extends AbstractMethod
         }
         $data['orderDescription'] = $Product;
 
-        $data['shopperSessionId'] = $this->customerSession->getSessionId();
-        $data['shopperUserAgent'] = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
-        $data['shopperAcceptHeader'] = '*/*';
 
         if ($this->backendAuthSession->isLoggedIn()) {
             $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
@@ -418,18 +372,17 @@ class NihaopayPayments extends AbstractMethod
         } else {
             $data['shopperEmailAddress'] = $this->customerSession->getCustomer()->getEmail();
         }
-        $data['siteCode'] = null;
-        $siteCodes = $this->config->getSitecodes();
-        if ($siteCodes) {
-            foreach ($siteCodes as $siteCode) {
-                    $data['siteCode'] = $siteCode['site_code'];
-                    $data['settlementCurrency'] = $siteCode['settlement_currency'];
-                    break;
-            }
-        }
-        if (!isset($data['settlementCurrency'])) {
-            $data['settlementCurrency'] = $this->config->getSettlementCurrency();
-        }
         return $data;
     }
+    protected function getAmount($amount, $currency = 'USD')
+    {
+        if ($currency == 'JPY') {
+            return (int)$amount;
+        }
+        else{
+            $amount = round($amount, 2) * 100;
+            return (int)$amount;
+        }
+    }
 }
+
