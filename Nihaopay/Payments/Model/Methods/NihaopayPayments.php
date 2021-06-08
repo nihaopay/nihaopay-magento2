@@ -119,9 +119,9 @@ class NihaopayPayments extends AbstractMethod
         parent::assignData($data);
 
         $_tmpData = $data->_data;
-        $_serializedAdditionalData = serialize($_tmpData['additional_data']);
-        $additionalDataRef = $_serializedAdditionalData;
-        $additionalDataRef = unserialize($additionalDataRef);
+        // $_serializedAdditionalData = serialize($_tmpData['additional_data']);
+        // $additionalDataRef = $_serializedAdditionalData;
+        // $additionalDataRef = unserialize($additionalDataRef);
         // $_paymentToken = $additionalDataRef['paymentToken'];
 
         $infoInstance = $this->getInfoInstance();
@@ -205,7 +205,7 @@ class NihaopayPayments extends AbstractMethod
             $is_mobile = 1;
         }
 
-        if ((strpos(strtolower($_SERVER['HTTP_ACCEPT']), 'application/vnd.wap.xhtml+xml') > 0) or ((isset($_SERVER['HTTP_X_WAP_PROFILE']) or isset($_SERVER['HTTP_PROFILE'])))) {
+        if ((strpos(strtolower($_SERVER['HTTP_ACCEPT']), 'application/vnd.wap.xhtml+xml')  !== false) or ((isset($_SERVER['HTTP_X_WAP_PROFILE']) or isset($_SERVER['HTTP_PROFILE'])))) {
             $is_mobile = 1;
         }
 
@@ -217,12 +217,12 @@ class NihaopayPayments extends AbstractMethod
         }
 
         if (isset($_SERVER['ALL_HTTP'])) {
-            if (strpos(strtolower($_SERVER['ALL_HTTP']), 'OperaMini') > 0) {
+            if (strpos(strtolower($_SERVER['ALL_HTTP']), 'OperaMini')  !== false) {
                 $is_mobile = 1;
             }
         }
 
-        if (strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'windows') > 0) {
+        if (strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'windows')  !== false) {
             $is_mobile = 0;
         }
 

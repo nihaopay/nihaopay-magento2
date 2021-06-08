@@ -14,12 +14,14 @@ class Config
     \Magento\Framework\App\Config\ScopeConfigInterface $configInterface,
     \Magento\Customer\Model\Session $customerSession,
     \Magento\Backend\Model\Session\Quote $sessionQuote,
+    \Magento\Framework\Serialize\Serializer\Json $serialize,
     \Magento\Store\Model\StoreManagerInterface $storeManager
     )
     {
         $this->_scopeConfigInterface = $configInterface;
         $this->customerSession = $customerSession;
         $this->sessionQuote = $sessionQuote;
+        $this->serialize = $serialize;
         $this->storeManager = $storeManager;
     }
 
@@ -85,7 +87,7 @@ class Config
     {
         $sitecodeConfig = $this->_scopeConfigInterface->getValue('payment/nihaopay_payments_card/sitecodes');
         if ($sitecodeConfig) {
-            $siteCodes = unserialize($sitecodeConfig);
+            $siteCodes = $this->serialize->unserialize($sitecodeConfig);
             if (is_array($siteCodes)) {
                 return $siteCodes;
             }
