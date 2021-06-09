@@ -119,20 +119,12 @@ class NihaopayPayments extends AbstractMethod
         parent::assignData($data);
 
         $_tmpData = $data->_data;
-        $_serializedAdditionalData = serialize($_tmpData['additional_data']);
-        $additionalDataRef = $_serializedAdditionalData;
-        $additionalDataRef = unserialize($additionalDataRef);
-        // $_paymentToken = $additionalDataRef['paymentToken'];
-
         $infoInstance = $this->getInfoInstance();
-        // $infoInstance->setAdditionalInformation('payment_token', $_paymentToken);
         return $this;
     }
 
     public function createApmOrder($quote, $reference)
     {
-
-
         $orderId = $quote->getReservedOrderId();
         $payment = $quote->getPayment();
         $amount = $quote->getGrandTotal();
@@ -205,7 +197,7 @@ class NihaopayPayments extends AbstractMethod
             $is_mobile = 1;
         }
 
-        if ((strpos(strtolower($_SERVER['HTTP_ACCEPT']), 'application/vnd.wap.xhtml+xml') > 0) or ((isset($_SERVER['HTTP_X_WAP_PROFILE']) or isset($_SERVER['HTTP_PROFILE'])))) {
+        if ((strpos(strtolower($_SERVER['HTTP_ACCEPT']), 'application/vnd.wap.xhtml+xml') !== false) or ((isset($_SERVER['HTTP_X_WAP_PROFILE']) or isset($_SERVER['HTTP_PROFILE'])))) {
             $is_mobile = 1;
         }
 
@@ -217,12 +209,12 @@ class NihaopayPayments extends AbstractMethod
         }
 
         if (isset($_SERVER['ALL_HTTP'])) {
-            if (strpos(strtolower($_SERVER['ALL_HTTP']), 'OperaMini') > 0) {
+            if (strpos(strtolower($_SERVER['ALL_HTTP']), 'OperaMini') !== false) {
                 $is_mobile = 1;
             }
         }
 
-        if (strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'windows') > 0) {
+        if (strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'windows') !== false) {
             $is_mobile = 0;
         }
 
@@ -376,40 +368,12 @@ class NihaopayPayments extends AbstractMethod
 
     protected function getSharedOrderDetails($quote, $currencyCode)
     {
-
-        $billing = $quote->getBillingAddress();
-        $shipping = $quote->getShippingAddress();
+      
         $items = $quote->getAllItems();
 
         $data = [];
-
-
         $data['currencyCode'] = $currencyCode;
-        $data['name'] = $billing->getName();
 
-        $data['billingAddress'] = [
-            "address1" => $billing->getStreetLine(1),
-            "address2" => $billing->getStreetLine(2),
-            "address3" => $billing->getStreetLine(3),
-            "postalCode" => $billing->getPostcode(),
-            "city" => $billing->getCity(),
-            "state" => "",
-            "countryCode" => $billing->getCountryId(),
-            "telephoneNumber" => $billing->getTelephone()
-        ];
-
-        $data['deliveryAddress'] = [
-            "firstName" => $shipping->getFirstname(),
-            "lastName" => $shipping->getLastname(),
-            "address1" => $shipping->getStreetLine(1),
-            "address2" => $shipping->getStreetLine(2),
-            "address3" => $shipping->getStreetLine(3),
-            "postalCode" => $shipping->getPostcode(),
-            "city" => $shipping->getCity(),
-            "state" => "",
-            "countryCode" => $shipping->getCountryId(),
-            "telephoneNumber" => $shipping->getTelephone()
-        ];
 
         $Product = '';
 
@@ -419,9 +383,6 @@ class NihaopayPayments extends AbstractMethod
         }
         $data['orderDescription'] = $Product;
 
-        $data['shopperSessionId'] = $this->customerSession->getSessionId();
-        $data['shopperUserAgent'] = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
-        $data['shopperAcceptHeader'] = '*/*';
 
         if ($this->backendAuthSession->isLoggedIn()) {
             $objectManager = \Magento\Framework\App\ObjectManager::getInstance();

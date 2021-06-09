@@ -8,7 +8,6 @@ class Alipay extends NihaopayPayments {
 	protected $_canAuthorize = false;
     protected $_canCapture = true;
     protected $_canRefund = true;
-	protected $_formBlockType = 'nihaopay/payment_alipayForm';
     protected $_isGateway = true;
 
     protected function myvendor(){

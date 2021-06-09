@@ -40,7 +40,7 @@
         </group>
 
 
-        <group id="nihaopay_payments_alipay" translate="label" sortOrder="400" type="text" showInDefault="1" showInWebsite="1">
+        <group id="nihaopay_payments_alipay" translate="label" sortOrder="101" type="text" showInDefault="1" showInWebsite="1">
             <label>AliPay</label>
             <field id="alipay_active" translate="label" sortOrder="1" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Alipay Enabled</label>
@@ -61,7 +61,7 @@
             </field>
         </group>
 
-        <group id="nihaopay_payments_wechatpay" translate="label" sortOrder="400" type="text" showInDefault="1" showInWebsite="1">
+        <group id="nihaopay_payments_wechatpay" translate="label" sortOrder="102" type="text" showInDefault="1" showInWebsite="1">
             <label>WechatPay</label>
             <field id="wechatpay_active" translate="label" sortOrder="1" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Wechatpay Enabled</label>
@@ -82,7 +82,7 @@
             </field>
         </group>
 
-      <group id="nihaopay_payments_unionpay" translate="label" sortOrder="400" type="text" showInDefault="1" showInWebsite="1">
+      <group id="nihaopay_payments_unionpay" translate="label" sortOrder="103" type="text" showInDefault="1" showInWebsite="1">
             <label>UnionPay</label>
             <field id="unionpay_active" translate="label" sortOrder="1" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Unionpay Enabled</label>
