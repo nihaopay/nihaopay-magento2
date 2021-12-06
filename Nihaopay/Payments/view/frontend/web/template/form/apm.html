@@ -38,7 +38,7 @@
                 <button class="action primary checkout"
                         type="submit"
                         data-bind="
-                        click: createToken,
+                        click: placeOrder,
                         attr: {title: $t('Place Orde ')},
                         enable: (getCode() == isChecked()),
                         css: {disabled: !isPlaceOrderActionAllowed()}

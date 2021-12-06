@@ -25,10 +25,8 @@ define(
                     .observe('paymentToken');
                 return this;
             },
-            createToken: function(element, event, extraInput) {
+            placeOrder: function(element, event, extraInput) {
                  
-
-
                  $.when(setPaymentInformationAction(this.messageContainer, {
                     'method': this.getCode(),
                     'additional_data': {
