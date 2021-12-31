@@ -94,6 +94,8 @@ class Ipn extends Apm implements CsrfAwareActionInterface
             ->registerCaptureNotification($amount);
 
         $this->orderSender->send($order);
+        $order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING)
+            ->setStatus($this->salesOrderConfig->getStateDefaultStatus(\Magento\Sales\Model\Order::STATE_PROCESSING));
         $order->addStatusHistoryComment(
                     __('Send orderConfirmation email to customer #%1.', $order->getStoreId())
                 )
