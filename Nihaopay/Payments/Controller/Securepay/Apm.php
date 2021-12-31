@@ -22,6 +22,7 @@ abstract class Apm extends \Magento\Framework\App\Action\Action
     protected $methods = [];
 
     protected $wordpayPaymentsCard;
+    protected $salesOrderConfig;
 
     protected $methodCodes = [
         'nihaopay_payments_alipay',"nihaopay_payments_wechatpay","nihaopay_payments_unionpay"
@@ -35,6 +36,7 @@ abstract class Apm extends \Magento\Framework\App\Action\Action
         \Magento\Checkout\Helper\Data $checkoutData,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Sales\Model\Order\Email\Sender\OrderSender $orderSender,
+        \Magento\Sales\Model\Order\Config $salesOrderConfig,
         \Nihaopay\Payments\Logger\Logger $wpLogger,
         \Nihaopay\Payments\Model\Config $config,
         $params = []
@@ -43,7 +45,7 @@ abstract class Apm extends \Magento\Framework\App\Action\Action
         $this->checkoutSession = $checkoutSession;
         $this->orderFactory = $orderFactory;
         $this->orderSender = $orderSender;
-        
+        $this->salesOrderConfig = $salesOrderConfig;
         foreach ($this->methodCodes as $code) {
             $this->methods[$code] = $paymentHelper->getMethodInstance($code);
         }
